@@ -1,11 +1,17 @@
 const express = require('express');
 const path = require('path');
-const { configDotenv } = require('dotenv');
+const dotenv = require('dotenv');
+
+dotenv.config();
+
+const { init } = require('./database/mongo.cjs');
+const { pg } = require('./database/pg.cjs');
 
 const FRONTEND_PUBLIC_PATH = path.join(__dirname, '/public/');
 const FRONTEND_HTML_PATH = path.join(FRONTEND_PUBLIC_PATH, 'index.html');
 
-configDotenv();
+init();
+
 const app = express();
 
 app.set('PORT', process.env.PORT);
@@ -23,6 +29,7 @@ app.use((_, res, next) => {
 
 app.use((_, res) => {
     res.sendFile(FRONTEND_HTML_PATH);
+    pg.query('SELECT NOW()');
 });
 
 app.listen(app.get('PORT'), (error) => {
