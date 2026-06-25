@@ -4,13 +4,16 @@ const dotenv = require('dotenv');
 
 dotenv.config();
 
-const { init } = require('./database/mongo.cjs');
+const mongo = require('./database/mongo.cjs');
 const { pg } = require('./database/pg.cjs');
 
-const FRONTEND_PUBLIC_PATH = path.join(__dirname, '/public/');
+const userRouter = require('./routers/user.router.cjs');
+const authRouter = require('./routers/auth.router.cjs');
+
+const FRONTEND_PUBLIC_PATH = path.join(__dirname, '/interface/public/');
 const FRONTEND_HTML_PATH = path.join(FRONTEND_PUBLIC_PATH, 'index.html');
 
-init();
+mongo.init();
 
 const app = express();
 
@@ -25,7 +28,8 @@ app.use((_, res, next) => {
     next();
 });
 
-// routers...
+app.use('/api/user/', userRouter);
+app.use('/api/auth/', authRouter);
 
 app.use((_, res) => {
     res.sendFile(FRONTEND_HTML_PATH);

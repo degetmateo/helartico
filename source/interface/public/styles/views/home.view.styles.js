@@ -1,0 +1,70 @@
+export default () => {
+    return `
+        <style>
+            .home {
+                width: 100dvw;
+                height: 100dvh;
+
+                display:flex;
+                flex-direction:column;
+
+                align-items:center;
+
+                overflow-y:auto;
+            }
+
+            .home .header {
+                width: 100%;
+                box-sizing:border-box;
+                padding:0 15px;
+                height: 50px;
+                background-color: var(--color-main);
+                border-bottom: 1px solid var(--color-hover);
+
+                display:flex;
+                flex-direction:row;
+                align-items:center;
+                justify-content:space-between;
+
+                position: absolute;
+                top: 0;
+                left: 0;
+
+                z-index:1;
+            }
+
+            .home .header .points .number {
+                font-weight:bold;
+            }
+
+            .home .main {
+                position:relative;
+                top:50px;
+                display:flex;
+                flex-direction:column;
+
+                width:100%;
+            }
+
+            .home .main .form {
+                width:100%;    
+                padding:10px;
+                display:flex;
+                align-items:center;
+                justify-content:center;
+            }
+
+            .home .main .form .input {
+                padding:10px;
+                border-radius:10px;
+                outline:1px solid #000;
+                border:none;
+            }
+
+            .home .main .form .input:focus {
+                border:none;
+                outline: 3px solid brown;
+            }
+        </style>
+    `;
+};

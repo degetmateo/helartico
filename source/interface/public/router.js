@@ -1,4 +1,9 @@
+import ErrorView from "./views/error.view.js";
+import HomeView from "./views/home.view.js";
 import LandingView from "./views/landing.view.js";
+import SignInView from "./views/signin.view.js";
+import SignUpView from "./views/signup.view.js";
+import WaitingView from "./views/waiting.view.js";
 
 class Router {
     constructor () {
@@ -6,8 +11,12 @@ class Router {
         this.event = new Event('pathnamechange');
 
         this.views = {
-            landing: new LandingView()
-            // error: new ErrorView(),
+            landing: new LandingView(),
+            error: new ErrorView(),
+            signup: new SignUpView(),
+            signin: new SignInView(),
+            waiting: new WaitingView(),
+            home: new HomeView()
             // home: new HomeView(),
             // products: new ProductsView(),
             // cart: new CartView()
@@ -16,8 +25,11 @@ class Router {
         this.router
             .on("/", () => this.views.landing.init())
             // .on('/products', (meta) => this.views.products.init(meta))
-            // .on('/cart', () => this.views.cart.init())
-            // .notFound(() => this.views.error.init());
+            .on('/signup', () => this.views.signup.init())
+            .on('/signup/waiting', () => this.views.waiting.init())
+            .on('/signin', () => this.views.signin.init())
+            .on('/home', () => this.views.home.init())
+            .notFound(() => this.views.error.init());
     };
 
     resolve = () => {

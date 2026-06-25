@@ -1,20 +1,19 @@
-const { Db, MongoClient } = require('mongodb');
+const { MongoClient } = require('mongodb');
 
-let client;
-let mongo;
+const mongo = {
+    init: null,
+    db: null
+};
 
-const init = async () => {    
+mongo.init = async () => {    
     try {
         client = new MongoClient(process.env.MONGODB_DATABASE_KEY);
         await client.connect();
-        mongo = client.db(process.env.MONGODB_DATABASE_NAME);
+        mongo.db = client.db(process.env.MONGODB_DATABASE_NAME);
         console.log('✅ | MongoDB connected.');
     } catch (error) {
         console.error('🟥 | MongoDB error: ', error);
     };
 };
 
-module.exports = {
-    init,
-    mongo
-};
+module.exports = mongo;

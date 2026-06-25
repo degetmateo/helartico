@@ -1,7 +1,7 @@
 export default () => {
     return `
         <style>
-            .signin-view {
+            .waiting {
                 width:100%;
                 height:100%;
                 display:flex;
@@ -9,15 +9,13 @@ export default () => {
                 justify-content:center;
             }
 
-            .sigin-container {
+            .waiting-container {
                 display:flex;
                 flex-direction:column;
-                gap:10px;
-            }
-
-            .signin-button {
                 padding:10px;
-                background-color:red;
+                gap:10px;
+                align-items:center;
+                justify-content:center;
             }
         </style>
     `;
