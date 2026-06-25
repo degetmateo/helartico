@@ -1,0 +1,33 @@
+{
+  "compilerOptions": {
+    /* Entorno de ejecución y salida */
+    "target": "ES2022",                          /* Versión de JavaScript moderna para Node.js */
+    "module": "NodeNext",                        /* Gestión de módulos moderna (Soporta ESM y CommonJS) */
+    "moduleResolution": "NodeNext",
+    "outDir": "./dist",                          /* Dónde se guardará el código compilado del servidor */
+    "rootDir": "./src",                          /* Carpeta raíz del código fuente */
+
+    /* Rigor y calidad de código */
+    "strict": true,                              /* Habilita todas las comprobaciones estrictas */
+    "noImplicitAny": true,                       /* Error si una variable no tiene tipo y asume 'any' */
+    "strictNullChecks": true,                    /* Mayor seguridad manejando null y undefined */
+
+    /* Interoperabilidad y optimización */
+    "esModuleInterop": true,                     /* Facilita importar librerías CommonJS antiguas */
+    "skipLibCheck": true,                        /* Omite revisión de tipos de node_modules (más rápido) */
+    "forceConsistentCasingInFileNames": true,     /* Respeta mayúsculas/minúsculas en nombres de archivos */
+    "allowJs": false,
+    "types": ["node"],
+    /* Configuración para Node.js Server */
+    "lib": ["ES2022"]                            /* Solo librerías de Node, sin "DOM" (evita mezclar entornos) */
+  },
+  "include": [
+    "src/**/*"                                   /* Incluye todo el código fuente */
+  ],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "src/interface/admin/**/*",
+    "src/interface/public/**/*"                 /* 👈 Excluye la interfaz para que no mezcle tipos del navegador */
+  ]
+}
