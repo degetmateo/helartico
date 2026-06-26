@@ -13,4 +13,10 @@ declare global {
     }
 }
 
+declare module 'express' {
+    interface Request {
+        member?: any;
+    }
+}
+
 export {};

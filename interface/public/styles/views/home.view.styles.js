@@ -37,6 +37,13 @@ export default () => {
                 font-weight:bold;
             }
 
+            .home .header .signout {
+                font-size: 18px;
+                padding:4px;
+                border-radius:5px;
+                border:2px solid var(--color-main-darker);
+            }
+
             .home .main {
                 position:relative;
                 top:50px;
@@ -47,11 +54,11 @@ export default () => {
             }
 
             .home .main .form {
-                width:100%;    
                 padding:10px;
                 display:flex;
                 align-items:center;
                 justify-content:center;
+                border-bottom:1px solid var(--color-hover);
             }
 
             .home .main .form .input {
@@ -64,6 +71,16 @@ export default () => {
             .home .main .form .input:focus {
                 border:none;
                 outline: 3px solid brown;
+            }
+
+            .home .main .products {
+                padding: 10px;
+                box-sizing:border-box;
+
+                display: flex;
+                flex-direction: column;
+                align-items:center;
+                gap:10px;
             }
         </style>
     `;

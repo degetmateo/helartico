@@ -12,8 +12,9 @@ import { pg } from './database/pg.js';
 
 import membersRouter from './routers/members.router.js';
 import authRouter from './routers/auth.router.js';
+import productsRouter from './routers/products.router.js';
 
-const FRONTEND_PUBLIC_PATH: string = path.join(__dirname, '/interface/public/');
+const FRONTEND_PUBLIC_PATH: string = path.join(__dirname, '../interface/public/');
 const FRONTEND_HTML_PATH: string = path.join(FRONTEND_PUBLIC_PATH, 'index.html');
 
 mongoInit();
@@ -31,8 +32,9 @@ app.use((_: Request, res: Response, next: NextFunction) => {
     next();
 });
 
-app.use('/api/member/', membersRouter);
-app.use('/api/auth/', authRouter);
+app.use('/api/members', membersRouter);
+app.use('/api/auth', authRouter);
+app.use('/api/products', productsRouter);
 
 app.use((_: Request, res: Response) => {
     res.sendFile(FRONTEND_HTML_PATH);

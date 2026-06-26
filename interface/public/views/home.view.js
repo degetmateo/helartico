@@ -1,3 +1,5 @@
+import AppProduct from "../components/product.component.js";
+import router from "../router.js";
 import homeViewStyles from "../styles/views/home.view.styles.js";
 import homeViewTemplate from "../templates/views/home.view.template.js";
 import BaseView from "./base.view.js";
@@ -10,6 +12,13 @@ export default class HomeView extends BaseView {
             event.preventDefault();
             this.submit();
         });
+        this.view.querySelector('#signout').addEventListener('click', (event) => {
+            event.preventDefault();
+            localStorage.clear('token');
+            window.app = {};
+            window.app.logged = false;
+            router.navigateTo('/');
+        });
     };
 
     async init () {
@@ -17,7 +26,23 @@ export default class HomeView extends BaseView {
         this.view.querySelector('#number').innerHTML = window.app.member.points;
         this.view.querySelector('#name').innerHTML = window.app.member.names;
 
+        const req = await fetch('/api/products', { 
+            method: "GET",
+            headers: { "authorization": 'Bearer ' + localStorage.getItem('token') }
+        });
         
+        const res = await req.json();
+
+        const data = res.data;
+        const container = this.view.querySelector('#products');
+
+        container.innerHTML = '';
+
+        for (const p of data) {
+            container.append(new AppProduct(p));
+        };
+
+        console.log(res);
     };
 
     async submit () {

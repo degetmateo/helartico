@@ -3,7 +3,7 @@ import { mongoDb } from "../../database/mongo.js";
 import BaseError from "../../errors/base.error.js";
 import DatabaseError from "../../errors/database.error.js";
 
-module.exports.productsRepositoryGet = async (data: {
+const productsRepositoryGet = async (data: {
     name: string | null;
 }) => {
     try {
@@ -21,3 +21,5 @@ module.exports.productsRepositoryGet = async (data: {
         else throw new DatabaseError();
     };
 };
+
+export default productsRepositoryGet;

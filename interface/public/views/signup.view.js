@@ -32,7 +32,7 @@ export default class SignUpView extends BaseView {
             form.reset();
             router.navigateTo('/signup/waiting');
 
-            const req = await fetch('/api/member/signup', {
+            const req = await fetch('/api/members/signup', {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
@@ -46,13 +46,13 @@ export default class SignUpView extends BaseView {
 
             const res = await req.json();
             if (!req.ok) throw new Error(res.error.message);
-
+            console.log(res);
             localStorage.setItem('token', res.data.token);
             window.app = { 
                 member: { 
-                    names: res.data.names, 
-                    surnames: res.data.surnames,
-                    points: res.data.points 
+                    names: res.data.member.names, 
+                    surnames: res.data.member.surnames,
+                    points: res.data.member.points 
                 } 
             };
             

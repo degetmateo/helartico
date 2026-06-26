@@ -38,7 +38,7 @@ export default class SignInView extends BaseView {
             if (!req.ok) throw new Error(res.error.message);
 
             form.reset();
-
+            console.log(res);
             localStorage.setItem('token', res.data.token);
             window.app = { 
                 member: { 

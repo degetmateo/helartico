@@ -4,7 +4,7 @@ import emailValidator from "../../validators/email.validator.js";
 import membersRepository from "../../repository/members/members.repository.js";
 import UnauthorizedError from "../../errors/unauthorized.error.js";
 import { passwordCompare } from "../../helpers/password.helper.js";
-import { generateToken } from "../../helpers/jwt.helper.js";
+import { generateMemberToken, generateToken } from "../../helpers/jwt.helper.js";
 import { mongoDb } from "../../database/mongo.js";
 import { UUID } from "mongodb";
 import { responseError, responseOk } from "../../helpers/response.helper.js";
@@ -24,17 +24,17 @@ const authControllerSignIn = async (req: Request, res: Response) => {
         if (!member) throw new UnauthorizedError('Las credenciales no coinciden.');
         if (!(await passwordCompare(password, member.password))) throw new UnauthorizedError('Las credenciales no coinciden.');
 
-        const token = await generateToken({ id: member.id, dni: member.dni, email: member.email }, '30d');
+        const token = await generateMemberToken({ _id: member._id, dni: member.dni, email: member.email });
 
-        const c = mongoDb.collection('users');
-        const publicMember: any = await c.findOne({ _id: new UUID(member.id) as any });
+        const c = mongoDb.collection('members');
+        const publicMember: any = await c.findOne({ _id: new UUID(member._id) as any });
 
         const data = {
             token,
             member: {
-                id: member.id,
-                names: member.names,
-                surnames: member.surnames,
+                _id: member._id,
+                names: publicMember.names,
+                surnames: publicMember.surnames,
                 points: publicMember.points
             }
         };
