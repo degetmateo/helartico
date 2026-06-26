@@ -14,7 +14,7 @@ import membersRouter from './routers/members.router.js';
 import authRouter from './routers/auth.router.js';
 import productsRouter from './routers/products.router.js';
 
-const FRONTEND_PUBLIC_PATH: string = path.join(__dirname, '../interface/public/');
+const FRONTEND_PUBLIC_PATH: string = path.join(__dirname, '../public');
 const FRONTEND_HTML_PATH: string = path.join(FRONTEND_PUBLIC_PATH, 'index.html');
 
 mongoInit();
