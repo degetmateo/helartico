@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node --env-file=.env ./dist/index.js",
     "create-staff": "node ./scripts/create_staff.cjs",
-    "dev": "tsx watch --env-file=.env ./src/index.ts",
+    "dev": "tsx --env-file=.env ./src/index.ts",
     "build": "tsc"
   },
   "keywords": [],

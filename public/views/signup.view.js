@@ -27,6 +27,7 @@ export default class SignUpView extends BaseView {
             const names = this.view.querySelector('#input-names').value;
             const surnames = this.view.querySelector('#input-surnames').value;
             const email = this.view.querySelector('#input-email').value;
+            const phone = this.view.querySelector('#input-phone').value;
             const password = this.view.querySelector('#input-password').value;
 
             form.reset();
@@ -40,13 +41,14 @@ export default class SignUpView extends BaseView {
                     names,
                     surnames,
                     email,
+                    phone,
                     password
                 })
             });
 
             const res = await req.json();
             if (!req.ok) throw new Error(res.error.message);
-            console.log(res);
+            
             localStorage.setItem('token', res.data.token);
             window.app = { 
                 member: { 

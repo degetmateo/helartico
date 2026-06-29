@@ -22,19 +22,8 @@ export default () => {
                 border: 1px solid var(--color-main-darker);
             }
 
-            .landing-button {
-                padding:10px;
-                background-color: var(--color-main-darker);
-                border-radius:10px;
-                display:flex;
-                align-items:center;
-                justify-content:center;
-                font-size:20px;
-                cursor:pointer;
-            }
-
-            .landing-button:hover {
-                background-color: var(--color-hover);
+            .landing-view .message {
+                color: var(--log-cabin);
             }
 
             @media (min-width: 512px) {

@@ -8,16 +8,21 @@ export default class HomeView extends BaseView {
     constructor () {
         super();
         this.view.innerHTML = homeViewTemplate() + homeViewStyles();
-        this.view.querySelector('#form').addEventListener('submit', (event) => {
-            event.preventDefault();
-            this.submit();
-        });
+        // this.view.querySelector('#form').addEventListener('submit', (event) => {
+        //     event.preventDefault();
+        //     this.submit();
+        // });
         this.view.querySelector('#signout').addEventListener('click', (event) => {
             event.preventDefault();
             localStorage.clear('token');
             window.app = {};
             window.app.logged = false;
             router.navigateTo('/');
+        });
+
+        document.addEventListener('app-points', (e) => {
+            const data = e.detail;
+            this.view.querySelector('#number').innerHTML = data.points;
         });
     };
 
@@ -40,6 +45,7 @@ export default class HomeView extends BaseView {
 
         for (const p of data) {
             container.append(new AppProduct(p));
+            // container.innerHTML += `<div class="separator"></div>`;
         };
 
         console.log(res);

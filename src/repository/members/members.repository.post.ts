@@ -3,7 +3,7 @@ import ConflictError from '../../errors/conflict.error.js';
 import { pg } from '../../database/pg.js';
 import { mongoDb } from '../../database/mongo.js';
 import { UUID } from 'mongodb';
-import { generateMemberToken, generateToken } from '../../helpers/jwt.helper.js';
+import { generateMemberToken } from '../../helpers/jwt.helper.js';
 import { PoolClient } from 'pg';
 import BaseError from '../../errors/base.error.js';
 import DatabaseError from '../../errors/database.error.js';
@@ -13,6 +13,7 @@ const membersRepositoryPost = async (data: {
     surnames: string;
     email: string;
     dni: string;
+    phone: string;
     password: string;
 }) => {
     let client: PoolClient = {} as PoolClient;
@@ -24,12 +25,12 @@ const membersRepositoryPost = async (data: {
 
         await client.query('BEGIN');
 
-        const r1: any = await client.query(q1, v1);
-        if (r1[0]) throw new ConflictError('Ya existe un usuario con esos datos.');
+        const r1 = await client.query(q1, v1);
+        if (r1.rows[0]) throw new ConflictError('Ya existe un usuario con esos datos.');
 
         const _id = uuid.v7();
-        const q2 = 'INSERT INTO member (_id, dni, email, password) VALUES ($1, $2, $3, $4);';
-        const v2 = [_id, data.dni, data.email, data.password];
+        const q2 = 'INSERT INTO member (_id, dni, email, password, phone) VALUES ($1, $2, $3, $4, $5);';
+        const v2 = [_id, data.dni, data.email, data.password, data.phone];
 
         await client.query(q2, v2);
 

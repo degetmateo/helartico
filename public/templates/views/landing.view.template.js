@@ -6,10 +6,10 @@ export default () => {
                     <img class="landing-logo" src="/public/assets/logo.jpeg" alt="helartico logo" />
                 </div>
 
-                <span>¿Es tu primera vez? Creá tu cuenta.</span>
-                <div class="landing-button" id="landing-button-signup">Crear tu Cuenta</div>
-                <span>¿Ya tenés una cuenta? Iniciá sesión.</span>
-                <div class="landing-button" id="landing-button-signin">Iniciar Sesión</div>
+                <span class="message">¿Es tu primera vez? Creá tu cuenta.</span>
+                <button class="button" id="landing-button-signup">Crear tu Cuenta</button>
+                <span class="message">¿Ya tenés una cuenta? Iniciá sesión.</span>
+                <button class="button" id="landing-button-signin">Iniciar Sesión</button>
             </div>
         </div>
     `;

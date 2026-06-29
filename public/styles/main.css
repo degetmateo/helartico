@@ -2,10 +2,22 @@
     --color-main: #80b276;
     --color-main-darker: #577951;
     --color-hover: #496544;
+
+    --light-green-1: #80B275;
+    
+    --log-cabin: #293c29;
+    --bay-leaf: #75ac76;
+    --heavy-metal: #151c17;
+    --wedgewood: #4a85a5;
+    --wedgewood-darker: #3d6d86;
+    --mulled-wine: #554b66;
+    --mid-gray: #5d5e70;
+
+    --white: #FFFFFF;
 }
 
 .body {
-    background-color: var(--color-main);
+    background-color: var(--bay-leaf);
     margin: 0;
     padding: 0;
     height: 100%;
@@ -15,10 +27,70 @@
 .app {
     width: 100dvw;
     height: 100dvh;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: "Roboto", sans-serif;
 }
 
 .view {
     width: 100%;
     height: 100%;
+}
+
+.button {
+    border: none;
+    outline: none;
+    
+    font-family: "Inter", sans-serif;
+    color: #FFF;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+
+    background-color: var(--wedgewood);
+    
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+
+    text-transform: uppercase;
+
+    font-size: 18px;
+    letter-spacing: 1px;
+    font-weight: bolder;
+}
+
+.button:active {
+    background-color: var(--wedgewood-darker);
+}
+
+.input {
+    border: none;
+    outline: none;
+
+    border: 2px solid var(--heavy-metal);
+
+    padding: 10px;
+    border-radius: 5px;
+
+    background-color: var(--white);
+}
+
+.input:focus {
+    border: 2px solid var(--wedgewood);
+}
+
+.light-text {
+    color: var(--log-cabin);
+}
+
+.text-title {
+    color: var(--heavy-metal);
+    font-weight: bold;
+    font-size: 20px;
+}
+
+.separator {
+    width: 100%;
+    height: 1px;
+    background-color: var(--heavy-metal);
 }

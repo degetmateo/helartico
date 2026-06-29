@@ -9,6 +9,44 @@ class AppProduct extends HTMLElement {
         this.data = data;
         this.classList.add('product');
         this.innerHTML = productComponentTemplate(data);
+
+        this.button = this.querySelector('#button');
+        this.button.addEventListener('click', (event) => {
+            event.preventDefault();
+            this.exchange();
+        });
+    };
+
+    async exchange () {
+        try {
+            const userChoice = await confirm(`¿Querés canjear ${this.data.name} por ${this.data.exchange_points} puntos?`);
+            if (!userChoice) return;
+
+            if (window.app.member.points < this.data.exchange_points) {
+                throw new Error('Tus puntos no son suficientes para canjear este producto.');
+            };
+
+            const req = await fetch(`/api/products/exchange/${this.data._id}`, { 
+                method: "GET",
+                headers: { 'authorization': 'Bearer ' + localStorage.getItem('token') }
+            });
+            
+            const res = await req.json();
+            if (!req.ok) throw new Error(res.error.message);
+            
+            window.app.member.points = res.data.remaining_points;
+            
+            document.dispatchEvent(new CustomEvent('app-points', {
+                detail: {
+                    points: res.data.remaining_points
+                }
+            }));
+
+            alert('Puntos canjeados correctamente.');
+        } catch (error) {
+            console.error(error);
+            alert(error.message);
+        };
     };
 };
 

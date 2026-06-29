@@ -6,4 +6,6 @@ const productsRouter = Router();
 
 productsRouter.get('/', authorizeRequest, productsController.get);
 
+productsRouter.get('/exchange/:_id', authorizeRequest, productsController.exchange);
+
 export default productsRouter;

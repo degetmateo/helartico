@@ -2,8 +2,8 @@ import { Response } from "express";
 import BaseError from "../errors/base.error.js";
 import { RESPONSES } from "../static/responses.js";
 
-export const responseOk = (res: Response, statusCode: number = 200, data: any) => {
-    return res.status(statusCode).json({ data });
+export const responseOk = (res: Response, statusCode: number = 200, data: any, message?: string) => {
+    return res.status(statusCode).json({ data, message });
 };
 
 export const responseError = (res: Response, error: Error | BaseError) => {
