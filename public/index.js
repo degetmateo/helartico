@@ -1,5 +1,6 @@
 import AppHeader from "./components/header.component.js";
 import AppNav from "./components/nav.component.js";
+import AppPWAInstallBanner from "./components/pwa.install.banner.component.js";
 import router from "./router.js";
 import signIn from "./signin.js";
 
@@ -20,6 +21,19 @@ if ('serviceWorker' in navigator) {
 window._app = {};
 window._app.header = new AppHeader();
 window._app.nav = new AppNav();
+
+window.addEventListener('beforeinstallprompt', (event) => {
+    event.preventDefault();
+    window._app.pwa_event = event;
+    localStorage.clear('before pwa');
+});
+
+window.addEventListener('appinstalled', () => {
+    localStorage.setItem('pwa', 'installed');
+    if (window._app.pwa_banner) window._app.pwa_banner.remove();
+    window._app.pwa_banner = null;
+    console.log('pwa installed');
+});
 
 router.init();
 
