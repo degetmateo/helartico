@@ -13,11 +13,18 @@ import { pg } from './database/pg.js';
 import membersRouter from './routers/members.router.js';
 import authRouter from './routers/auth.router.js';
 import productsRouter from './routers/products.router.js';
+import codesRouter from './routers/codes.router.js';
 
 const FRONTEND_PUBLIC_PATH: string = path.join(__dirname, '../public');
 const FRONTEND_HTML_PATH: string = path.join(FRONTEND_PUBLIC_PATH, 'index.html');
 
-mongoInit();
+const queryPg = async () => {
+    try {
+        await pg.query('SELECT NOW()');
+    } catch (error) {
+        console.error(error);
+    };
+};
 
 const app = express();
 
@@ -35,13 +42,20 @@ app.use((_: Request, res: Response, next: NextFunction) => {
 app.use('/api/members', membersRouter);
 app.use('/api/auth', authRouter);
 app.use('/api/products', productsRouter);
+app.use('/api/codes', codesRouter);
 
-app.use((_: Request, res: Response) => {
+app.use(async (_: Request, res: Response) => {
     res.sendFile(FRONTEND_HTML_PATH);
-    pg.query('SELECT NOW()');
+    queryPg();
 });
 
-app.listen(app.get('PORT'), (error) => {
+app.listen(app.get('PORT'), async (error) => {
     if (error) console.error(error);
     console.log('Server listening on PORT:', app.get('PORT'));
+
+    try {
+        await mongoInit();
+    } catch (err) {
+        console.error(err);     
+    };
 });

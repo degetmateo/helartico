@@ -12,24 +12,10 @@ export default class HomeView extends BaseView {
         //     event.preventDefault();
         //     this.submit();
         // });
-        this.view.querySelector('#signout').addEventListener('click', (event) => {
-            event.preventDefault();
-            localStorage.clear('token');
-            window.app = {};
-            window.app.logged = false;
-            router.navigateTo('/');
-        });
-
-        document.addEventListener('app-points', (e) => {
-            const data = e.detail;
-            this.view.querySelector('#number').innerHTML = data.points;
-        });
     };
 
     async init () {
         super.init();
-        this.view.querySelector('#number').innerHTML = window.app.member.points;
-        this.view.querySelector('#name').innerHTML = window.app.member.names;
 
         const req = await fetch('/api/products', { 
             method: "GET",
@@ -45,10 +31,7 @@ export default class HomeView extends BaseView {
 
         for (const p of data) {
             container.append(new AppProduct(p));
-            // container.innerHTML += `<div class="separator"></div>`;
         };
-
-        console.log(res);
     };
 
     async submit () {

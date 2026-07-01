@@ -8,5 +8,11 @@ export default class BaseView {
     async init () {
         this.app.innerHTML = '';
         this.app.append(this.view);
+
+        this.headerContainer = this.view.querySelector('#app-header-container');
+        this.navContainer = this.view.querySelector('#app-nav-container');
+
+        if (this.headerContainer) this.headerContainer.append(window._app.header);
+        if (this.navContainer) this.navContainer.append(window._app.nav);
     };
 };

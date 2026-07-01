@@ -1,19 +1,15 @@
 export default () => {
     return `
         <div class="home">
-            <header class="header">
-                <div class="left">
-                    <i id="signout" class="fa-solid fa-arrow-right-from-bracket signout"></i>
-                    <span id="name" class="name"></span>
-                </div>
-                <span id="points home-header-points" class="points"><span id="number" class="number">0</span> PUNTOS</span>
-            </header>
+            <div id="app-header-container" class="app-header-container"></div>
 
             <main class="main">
                 <div id="products" class="products">
 
                 </div>
             </main>
+
+            <div id="app-nav-container" class="app-nav-container"></div>
         </div>
     `;
 };

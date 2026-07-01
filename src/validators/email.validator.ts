@@ -9,6 +9,7 @@ const emailValidator = (email: string) => {
         const parts = formatted.split('@');
         const domain = parts[1];
         if (!(domain.includes('.') && (domain.split('.').pop() as any).length >= 2)) throw new InvalidArgumentError();
+        if (email.length > 128) throw new InvalidArgumentError('Correo electrónico demasiado largo.');
     } catch (error) {
         console.error(error);
         throw new InvalidArgumentError('Correo electrónico inválido.');

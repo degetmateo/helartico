@@ -13,6 +13,8 @@
     --mulled-wine: #554b66;
     --mid-gray: #5d5e70;
 
+    --danger: #b00000;
+
     --white: #FFFFFF;
 }
 
@@ -63,6 +65,10 @@
     background-color: var(--wedgewood-darker);
 }
 
+.danger {
+    background-color: var(--danger);
+}
+
 .input {
     border: none;
     outline: none;
@@ -93,4 +99,24 @@
     width: 100%;
     height: 1px;
     background-color: var(--heavy-metal);
+}
+
+.app-header-container {
+    width: 100%;
+    height: 50px;
+
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1;
+}   
+
+.app-nav-container {
+    width: 100%;
+    height: 50px;
+    
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    z-index: 1;
 }

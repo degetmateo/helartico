@@ -6,6 +6,7 @@ const nameValidator = (name: string) => {
     try {
         const formatted = name.trim();
         if (!regexNombre.test(formatted)) throw new InvalidArgumentError();
+        if (name.length > 64) throw new InvalidArgumentError('Nombre demasiado largo.');
     } catch (error) {
         console.error(error);
         throw new InvalidArgumentError('Nombre inválido.');

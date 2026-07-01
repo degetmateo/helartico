@@ -1,5 +1,6 @@
 import productComponentStyles from "../styles/components/product.component.styles.js";
 import productComponentTemplate from "../templates/components/product.component.template.js";
+import AppCodePopup from "./code.popup.component.js";
 
 document.querySelector('#body').innerHTML += productComponentStyles();
 
@@ -22,7 +23,7 @@ class AppProduct extends HTMLElement {
             const userChoice = await confirm(`¿Querés canjear ${this.data.name} por ${this.data.exchange_points} puntos?`);
             if (!userChoice) return;
 
-            if (window.app.member.points < this.data.exchange_points) {
+            if (window._app.member.points < this.data.exchange_points) {
                 throw new Error('Tus puntos no son suficientes para canjear este producto.');
             };
 
@@ -34,7 +35,7 @@ class AppProduct extends HTMLElement {
             const res = await req.json();
             if (!req.ok) throw new Error(res.error.message);
             
-            window.app.member.points = res.data.remaining_points;
+            window._app.member.points = res.data.remaining_points;
             
             document.dispatchEvent(new CustomEvent('app-points', {
                 detail: {
@@ -42,7 +43,8 @@ class AppProduct extends HTMLElement {
                 }
             }));
 
-            alert('Puntos canjeados correctamente.');
+            const code = res.data.code;
+            window.app.append(new AppCodePopup(res.data));
         } catch (error) {
             console.error(error);
             alert(error.message);

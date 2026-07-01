@@ -19,6 +19,6 @@ export default class LandingView extends BaseView {
 
     async init () {
         super.init();
-        if (window.app.logged) router.navigateTo('/home');
+        if (window._app.logged) router.navigateTo('/home');
     };
 };

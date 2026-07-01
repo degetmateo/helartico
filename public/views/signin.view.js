@@ -1,4 +1,5 @@
 import router from "../router.js";
+import signIn from "../signin.js";
 import signinViewStyles from "../styles/views/signin.view.styles.js";
 import signinViewTemplate from "../templates/views/signin.view.template.js";
 import BaseView from "./base.view.js";
@@ -38,16 +39,9 @@ export default class SignInView extends BaseView {
             if (!req.ok) throw new Error(res.error.message);
 
             form.reset();
-            console.log(res);
+            
             localStorage.setItem('token', res.data.token);
-            window.app = { 
-                member: { 
-                    names: res.data.member.names, 
-                    surnames: res.data.member.surnames, 
-                    points: res.data.member.points 
-                } 
-            };
-
+            signIn(res.data.member);
             router.navigateTo('/home');
         } catch (error) {
             console.error(error);

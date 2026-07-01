@@ -1,4 +1,5 @@
 import router from "../router.js";
+import signIn from "../signin.js";
 import signupViewStyles from "../styles/views/signup.view.styles.js";
 import signupViewTemplate from "../templates/views/signup.view.template.js";
 import BaseView from "./base.view.js";
@@ -30,7 +31,6 @@ export default class SignUpView extends BaseView {
             const phone = this.view.querySelector('#input-phone').value;
             const password = this.view.querySelector('#input-password').value;
 
-            form.reset();
             router.navigateTo('/signup/waiting');
 
             const req = await fetch('/api/members/signup', {
@@ -49,15 +49,10 @@ export default class SignUpView extends BaseView {
             const res = await req.json();
             if (!req.ok) throw new Error(res.error.message);
             
-            localStorage.setItem('token', res.data.token);
-            window.app = { 
-                member: { 
-                    names: res.data.member.names, 
-                    surnames: res.data.member.surnames,
-                    points: res.data.member.points 
-                } 
-            };
+            form.reset();
             
+            localStorage.setItem('token', res.data.token);
+            signIn(res.data.member);            
             router.navigateTo('/home');
             window.alert('Tu cuenta se creó correctamente.');
         } catch (error) {
