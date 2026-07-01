@@ -48,6 +48,9 @@ const init = async () => {
             const res = await req.json();
             if (!req.ok) throw new Error(res.error.message);
 
+
+            localStorage.setItem('token', res.data.token);
+            delete res.data.token;
             signIn(res.data);
             router.resolve();
         } catch (error) {
