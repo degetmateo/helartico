@@ -1,3 +1,4 @@
+import AppWaitingPopup from "../components/waiting.popup.component.js";
 import router from "../router.js";
 import signIn from "../signin.js";
 import signinViewStyles from "../styles/views/signin.view.styles.js";
@@ -20,15 +21,17 @@ export default class SignInView extends BaseView {
 
     async init () {
         super.init();
+        if (window._app.logged) return router.navigateTo('/home');
     };
 
     async submit () {
+        const spinner = new AppWaitingPopup();
         try {
             const form = this.view.querySelector('#form');
             const email = this.view.querySelector('#input-email').value;
             const password = this.view.querySelector('#input-password').value;
 
-            router.navigateTo('/signup/waiting');
+            window.app.append(spinner);
 
             const req = await fetch('/api/auth/signin', {
                 method: "POST",
@@ -51,6 +54,8 @@ export default class SignInView extends BaseView {
             console.error(error);
             router.navigateTo('/signin');
             window.alert(error.message);
+        } finally {
+            spinner.remove();
         };
     };
 };

@@ -24,7 +24,10 @@ export default class HomeView extends BaseView {
         
         const res = await req.json();
 
+        if (!req.ok) console.error(res.error.message);
+
         const data = res.data;
+
         const container = this.view.querySelector('#products');
 
         container.innerHTML = '';

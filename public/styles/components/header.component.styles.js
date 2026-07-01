@@ -17,6 +17,14 @@ export default () => {
                 justify-content:space-between;
             }
 
+            .app-header .app-header-left {
+                display:flex;
+                flex-direction:row;
+                gap:10px;
+                align-items:center;
+                justify-content:flex-start;
+            }
+
             .app-header .points .number {
                 font-weight:bold;
             }

@@ -25,7 +25,6 @@ window._app.nav = new AppNav();
 window.addEventListener('beforeinstallprompt', (event) => {
     event.preventDefault();
     window._app.pwa_event = event;
-    localStorage.clear('before pwa');
 });
 
 window.addEventListener('appinstalled', () => {
@@ -37,26 +36,32 @@ window.addEventListener('appinstalled', () => {
 
 router.init();
 
-const token = localStorage.getItem('token');
+const init = async () => {
+    const token = localStorage.getItem('token');
+    if (token) {
+        try {
+            const req = await fetch('/api/auth/resume', {
+                method: "GET",
+                headers: { 'authorization': 'Bearer ' + token }
+            });
+            
+            const res = await req.json();
+            if (!req.ok) throw new Error(res.error.message);
 
-if (token) {
-    fetch('/api/auth/resume', {
-        method: "GET",
-        headers: { 'authorization': 'Bearer ' + token }
-    })
-    .then(async req => {
-        const res = await req.json();
-        signIn(res.data);
-        router.resolve();
-    })
-    .catch(err => {
+            signIn(res.data);
+            router.resolve();
+        } catch (error) {
+            console.error(error);
+            window._app.logged = false;
+            localStorage.clear('token');
+            router.navigateTo('/');
+            router.resolve();
+        };
+    } else {
         window._app.logged = false;
-        localStorage.clear('token');
         router.navigateTo('/');
         router.resolve();
-    });
-} else {
-    window._app.logged = false;
-    router.navigateTo('/');
-    router.resolve();
+    };
 };
+
+init();

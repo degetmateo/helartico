@@ -1,3 +1,4 @@
+import AppWaitingPopup from "../components/waiting.popup.component.js";
 import router from "../router.js";
 import signIn from "../signin.js";
 import signupViewStyles from "../styles/views/signup.view.styles.js";
@@ -20,9 +21,11 @@ export default class SignUpView extends BaseView {
 
     async init () {
         super.init();
+        if (window._app.logged) return router.navigateTo('/home');
     };
 
     async submit () {
+        const spinner = new AppWaitingPopup();
         try {
             const form = this.view.querySelector('#form');
             if (!form.checkValidity()) return window.alert('Tenés que completar el formulario.');         
@@ -34,7 +37,7 @@ export default class SignUpView extends BaseView {
             const phone = this.view.querySelector('#input-phone').value;
             const password = this.view.querySelector('#input-password').value;
 
-            router.navigateTo('/signup/waiting');
+            window.app.append(spinner);
 
             const req = await fetch('/api/members/signup', {
                 method: "POST",
@@ -62,6 +65,8 @@ export default class SignUpView extends BaseView {
             console.error(error);
             router.navigateTo('/signup');
             window.alert(error.message);
+        } finally {
+            spinner.remove();
         };
     };
 };

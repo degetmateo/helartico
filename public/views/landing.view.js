@@ -1,4 +1,5 @@
 import AppPWAInstallBanner from "../components/pwa.install.banner.component.js";
+import AppWaitingPopup from "../components/waiting.popup.component.js";
 import router from "../router.js";
 import landingViewStyles from "../styles/views/landing.view.styles.js";
 import landingViewTemplate from "../templates/views/landing.view.template.js";
@@ -21,7 +22,7 @@ export default class LandingView extends BaseView {
     async init () {
         super.init();
 
-        if (window._app.logged) router.navigateTo('/home');
+        if (window._app.logged) return router.navigateTo('/home');
 
         const isInStandaloneMode = () => {
             return ('standalone' in window.navigator) && (window.navigator.standalone);

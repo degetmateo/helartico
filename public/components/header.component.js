@@ -1,3 +1,4 @@
+import router from "../router.js";
 import headerComponentStyles from "../styles/components/header.component.styles.js";
 import headerComponentTemplate from "../templates/components/header.component.template.js";
 
@@ -9,6 +10,11 @@ class AppHeader extends HTMLElement {
         this.classList.add('app-header');
 
         this.innerHTML = headerComponentTemplate();
+
+        this.querySelector('#back').addEventListener('click', (event) => {
+            event.preventDefault();
+            router.goBack();
+        });
 
         this.pointsNumber = this.querySelector('#app-header-number');
         this.memberName = this.querySelector('#app-header-name');
