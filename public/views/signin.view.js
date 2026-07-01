@@ -12,6 +12,10 @@ export default class SignInView extends BaseView {
             event.preventDefault();
             this.submit();
         });
+
+        this.view.querySelector('#link').addEventListener('click', (event) => {
+            router.navigateTo('/signup');
+        });
     };
 
     async init () {

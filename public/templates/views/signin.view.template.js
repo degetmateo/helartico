@@ -8,6 +8,8 @@ export default () => {
                 <input id="input-password" class="input" type="password" placeholder="Contraseña" required />
 
                 <button id="button" class="button" type="submit">Iniciar Sesión</button>
+
+                <span class="light-text">¿Todavía no ténes cuenta? <span id="link" href="/signup" class="link-text">Creá tu cuenta ahora.</span></span>
             </form>
         </div>
     `;

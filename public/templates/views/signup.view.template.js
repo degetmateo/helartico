@@ -12,6 +12,8 @@ export default () => {
                 <input id="input-password" class="input" type="password" placeholder="Contraseña" required />
 
                 <button id="button" class="button" type="submit">Crear tu Cuenta</button>
+
+                <span class="light-text">¿Ya tenés tu cuenta? <span id="link" href="/signin" class="link-text">Iniciá sesión.</span></span>
             </form>
         </div>
     `;

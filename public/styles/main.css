@@ -9,7 +9,7 @@
     --bay-leaf: #75ac76;
     --heavy-metal: #151c17;
     --wedgewood: #4a85a5;
-    --wedgewood-darker: #3d6d86;
+    --wedgewood-darker: #114a69;
     --mulled-wine: #554b66;
     --mid-gray: #5d5e70;
 
@@ -87,6 +87,14 @@
 
 .light-text {
     color: var(--log-cabin);
+}
+
+.link-text {
+    color: var(--wedgewood-darker);
+}
+
+.link-text:active {
+    text-decoration: underline;
 }
 
 .text-title {
