@@ -61,6 +61,10 @@
     font-weight: bolder;
 }
 
+.button:focus {
+    background-color: var(--wedgewood-darker);
+}
+
 .button:active {
     background-color: var(--wedgewood-darker);
 }

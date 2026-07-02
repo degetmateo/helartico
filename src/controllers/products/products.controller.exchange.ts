@@ -20,7 +20,7 @@ const productsControllerExchange = async (req: Request, res: Response) => {
         const exchangeCodesCollection = mongoDb.collection('exchange_codes');
 
         const memberFilter: Filter<Document> = { _id: new UUID(req.member._id) as any };
-        const productFilter: Filter<Document> = { _id: new ObjectId(_id) as any };
+        const productFilter: Filter<Document> = { _id: new UUID(_id) as any };
 
         const member = await membersCollection.findOne(memberFilter);
         const product = await productsCollection.findOne(productFilter);
