@@ -5,6 +5,8 @@ import LandingView from "./views/landing.view.js";
 import ProfileView from "./views/profile.view.js";
 import SignInView from "./views/signin.view.js";
 import SignUpView from "./views/signup.view.js";
+import StaffValidateCodeView from "./views/staff.validate.code.view.js";
+import StaffView from "./views/staff.view.js";
 import WaitingView from "./views/waiting.view.js";
 
 class Router {
@@ -23,7 +25,9 @@ class Router {
             waiting: new WaitingView(),
             home: new HomeView(),
             profile: new ProfileView(),
-            codes: new CodesView()
+            codes: new CodesView(),
+            staff: new StaffView(),
+            staff_validate_code: new StaffValidateCodeView()
         };
 
         this.router
@@ -34,7 +38,13 @@ class Router {
             .on('/home', () => this.views.home.init())
             .on('/profile', () => this.views.profile.init())
             .on('/codes', () => this.views.codes.init())
+            .on('/staff', () => this.views.staff.init())
+            .on('/staff/validate-code', () => this.views.staff_validate_code.init())
             .notFound(() => this.views.error.init());
+    };
+
+    goToNotFound () {
+        this.views.error.init();
     };
 
     resolve = () => {

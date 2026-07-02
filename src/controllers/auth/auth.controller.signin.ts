@@ -24,7 +24,7 @@ const authControllerSignIn = async (req: Request, res: Response) => {
         if (!member) throw new UnauthorizedError('Las credenciales no coinciden.');
         if (!(await passwordCompare(password, member.password))) throw new UnauthorizedError('Las credenciales no coinciden.');
 
-        const token = await generateMemberToken({ _id: member._id, dni: member.dni, email: member.email });
+        const token = await generateMemberToken({ _id: member._id, dni: member.dni, email: member.email, role: member.role });
 
         const c = mongoDb.collection('members');
         const publicMember: any = await c.findOne({ _id: new UUID(member._id) as any });
@@ -35,7 +35,8 @@ const authControllerSignIn = async (req: Request, res: Response) => {
                 _id: member._id,
                 names: publicMember.names,
                 surnames: publicMember.surnames,
-                points: publicMember.points
+                points: publicMember.points,
+                role: member.role
             }
         };
 

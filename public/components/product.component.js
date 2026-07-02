@@ -1,6 +1,7 @@
 import productComponentStyles from "../styles/components/product.component.styles.js";
 import productComponentTemplate from "../templates/components/product.component.template.js";
 import AppCodePopup from "./code.popup.component.js";
+import AppWaitingPopup from "./waiting.popup.component.js";
 
 document.querySelector('#body').innerHTML += productComponentStyles();
 
@@ -19,6 +20,7 @@ class AppProduct extends HTMLElement {
     };
 
     async exchange () {
+        const spinner = new AppWaitingPopup();
         try {
             const userChoice = await confirm(`¿Querés canjear ${this.data.name} por ${this.data.exchange_points} puntos?`);
             if (!userChoice) return;
@@ -26,6 +28,8 @@ class AppProduct extends HTMLElement {
             if (window._app.member.points < this.data.exchange_points) {
                 throw new Error('Tus puntos no son suficientes para canjear este producto.');
             };
+
+            window.app.append(spinner);
 
             const req = await fetch(`/api/products/exchange/${this.data._id}`, { 
                 method: "GET",
@@ -48,6 +52,8 @@ class AppProduct extends HTMLElement {
         } catch (error) {
             console.error(error);
             alert(error.message);
+        } finally {
+            spinner.remove();
         };
     };
 };

@@ -29,8 +29,8 @@ const membersRepositoryPost = async (data: {
         if (r1.rows[0]) throw new ConflictError('Ya existe un usuario con esos datos.');
 
         const _id = uuid.v7();
-        const q2 = 'INSERT INTO member (_id, dni, email, password, phone) VALUES ($1, $2, $3, $4, $5);';
-        const v2 = [_id, data.dni, data.email, data.password, data.phone];
+        const q2 = 'INSERT INTO member (_id, dni, email, password, phone, role) VALUES ($1, $2, $3, $4, $5, $6);';
+        const v2 = [_id, data.dni, data.email, data.password, data.phone, 'member'];
 
         await client.query(q2, v2);
 
@@ -43,7 +43,7 @@ const membersRepositoryPost = async (data: {
             points: 0
         });
 
-        const token = await generateMemberToken({ _id, dni: data.dni, email: data.email });
+        const token = await generateMemberToken({ _id, dni: data.dni, email: data.email, role: 'member' });
 
         await client.query('COMMIT');
 
@@ -53,7 +53,8 @@ const membersRepositoryPost = async (data: {
                 _id,
                 names: data.names,
                 surnames: data.surnames,
-                points: 0
+                points: 0,
+                role: 'member'
             }
         };
     } catch (error) {

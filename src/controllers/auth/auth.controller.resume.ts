@@ -11,8 +11,14 @@ const authControllerResume = async (req: Request, res: Response) => {
         const collection = mongoDb.collection('members');
         const member = await collection.findOne({ _id: new UUID(req.member._id) as any });
         if (!member) throw new UnauthorizedError();
-        const token = await generateMemberToken({ _id: req.member._id, dni: req.member.dni, email: req.member.email });
+        const token = await generateMemberToken({ 
+            _id: req.member._id, 
+            dni: req.member.dni, 
+            email: req.member.email,
+            role: req.member.role
+        });
         member.token = token;
+        member.role = req.member.role;
         responseOk(res, RESPONSES.OK, member);
     } catch (error: any) {
         console.error(error);

@@ -8,6 +8,7 @@ import NotfoundError from "../../errors/notfound.error.js";
 import UnauthorizedError from "../../errors/unauthorized.error.js";
 import { RESPONSES } from "../../static/responses.js";
 import codesHelper from "../../helpers/codes.helper.js";
+import ConflictError from "../../errors/conflict.error.js";
 
 const productsControllerExchange = async (req: Request, res: Response) => {
     try {
@@ -30,26 +31,37 @@ const productsControllerExchange = async (req: Request, res: Response) => {
             throw new UnauthorizedError('Tus puntos no son suficientes para canjear este producto.');
         };
 
+        const exchangeCode = codesHelper.generateExchangeCode();
+
+        const secureCode = await exchangeCodesCollection.findOne({
+            code: exchangeCode,
+            status: "PENDING"
+        });
+
+        if (secureCode) throw new ConflictError('Ha ocurrido un error al canjear tu producto. Inténtalo de nuevo.');
+
         const points = member.points - product.exchange_points;
         const memberUpdate: Document[] | UpdateFilter<Document> = { $set: { points } };
 
         await membersCollection.updateOne(memberFilter, memberUpdate);
 
-        const exchangeCode = codesHelper.generateExchangeCode();
         const exchangeCodeId = uuid.v7();
 
         const expirationDate = new Date();
         expirationDate.setHours(expirationDate.getHours() + 24);
 
+        delete member.points;
+        member.dni = req.member.dni;
+
         const newCode: Document = {
             _id: new UUID(exchangeCodeId),
             code: exchangeCode,
-            member_id: member._id,
-            product_id: product._id,
             points: product.exchange_points,
             status: "PENDING",
             creation_date: new Date(),
-            expiration_date: expirationDate
+            expiration_date: expirationDate,
+            member: member,
+            product: product
         };
 
         await exchangeCodesCollection.insertOne(newCode);

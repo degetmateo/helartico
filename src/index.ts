@@ -14,9 +14,12 @@ import membersRouter from './routers/members.router.js';
 import authRouter from './routers/auth.router.js';
 import productsRouter from './routers/products.router.js';
 import codesRouter from './routers/codes.router.js';
+// import { authorizeStaff } from './helpers/authorization.helper.js';
 
 const FRONTEND_PUBLIC_PATH: string = path.join(__dirname, '../public');
+// const FRONTEND_ADMIN_PATH: string = path.join(__dirname, '../admin');
 const FRONTEND_HTML_PATH: string = path.join(FRONTEND_PUBLIC_PATH, 'index.html');
+// const STAFF_HTML_PATH: string = path.join(FRONTEND_ADMIN_PATH, 'staff.html');
 
 const queryPg = async () => {
     try {
@@ -31,7 +34,6 @@ const app = express();
 app.set('PORT', process.env.PORT);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use('/public', express.static(FRONTEND_PUBLIC_PATH));
 
 app.use((_: Request, res: Response, next: NextFunction) => {
     res.setHeader('X-Frame-Options', 'SAMEORIGIN');
@@ -44,7 +46,15 @@ app.use('/api/auth', authRouter);
 app.use('/api/products', productsRouter);
 app.use('/api/codes', codesRouter);
 
-app.use(async (_: Request, res: Response) => {
+// app.use('/admin', authorizeStaff, express.static(FRONTEND_ADMIN_PATH));
+
+// app.use(['/staff', '/staff*admin'], authorizeStaff, (_: Request, res: Response) => {
+//     res.sendFile(STAFF_HTML_PATH);
+// });
+
+app.use('/public', express.static(FRONTEND_PUBLIC_PATH));
+
+app.use((_: Request, res: Response) => {
     res.sendFile(FRONTEND_HTML_PATH);
     queryPg();
 });

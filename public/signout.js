@@ -6,6 +6,7 @@ const signOut = () => {
     window._app.member = {};
     window._app.header.updateName('');
     window._app.header.updateNumber(0);
+    window._app.nav.hideStaff();
     router.navigateTo('/');
 };
 

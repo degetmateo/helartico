@@ -11,6 +11,7 @@ const authorizeRequest = async (req: Request, res: Response, next: NextFunction)
         const token = authorization.split(' ')[1];
         if (!token) throw new UnauthorizedError();
         const data = validateToken(token);
+        if (!data.type) throw new UnauthorizedError();
         if (data.type != 'request') throw new UnauthorizedError();
         req.member = data;
         next();
@@ -19,6 +20,25 @@ const authorizeRequest = async (req: Request, res: Response, next: NextFunction)
     };
 };
 
+const authorizeStaff = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const headers = req.headers;
+        const authorization = headers['authorization'];
+        if (!authorization) throw new UnauthorizedError();
+        const token = authorization.split(' ')[1];
+        if (!token) throw new UnauthorizedError();
+        const data = validateToken(token);
+        if (!data.role) throw new UnauthorizedError();
+        if (data.role != 'staff') throw new UnauthorizedError();
+        req.member = data;
+        next();
+    } catch (error) {
+        console.error(error);
+        responseError(res, new UnauthorizedError('No estás autorizado para realizar esta acción.'));
+    };
+};
+
 export {
-    authorizeRequest
+    authorizeRequest,
+    authorizeStaff
 };

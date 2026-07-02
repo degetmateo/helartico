@@ -8,7 +8,7 @@ const codesControllerGet = async (req: Request, res: Response) => {
     try {
         const collection = mongoDb.collection('exchange_codes');
 
-        const filter: Filter<Document> = { member_id: new UUID(req.member._id) };
+        const filter: Filter<Document> = { "member._id": new UUID(req.member._id) };
         const sort: Sort = { _id: 'desc' };
 
         const data = await collection.find(filter).sort(sort).limit(20).toArray();

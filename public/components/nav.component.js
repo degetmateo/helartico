@@ -17,6 +17,15 @@ class AppNav extends HTMLElement {
                 router.navigateTo(href);
             });
         });
+        this.staffButton = this.querySelector('#nav-button-staff');
+    };
+
+    showStaff () {
+        this.staffButton.style = 'display:flex;';
+    };
+
+    hideStaff () {
+        this.staffButton.style = 'display:none;';
     };
 };
 

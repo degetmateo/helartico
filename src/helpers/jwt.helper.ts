@@ -24,6 +24,7 @@ const generateMemberToken = async (data: {
     _id: string;
     dni: string;
     email: string;
+    role: 'member' | 'staff';
 }) => {
     return await generateToken({
         ...data,
