@@ -1,6 +1,7 @@
 /// <reference path="../env.d.ts" />
 
 import express, { Request, Response, NextFunction } from 'express';
+import cors, { CorsOptions } from 'cors';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
@@ -32,6 +33,15 @@ const queryPg = async () => {
 const app = express();
 
 app.set('PORT', process.env.PORT);
+
+const corsConfig: CorsOptions = {
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    credentials: true,
+    origin: process.env.FRONTEND_URL
+};
+
+app.use(cors(corsConfig));
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 

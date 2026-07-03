@@ -1,6 +1,8 @@
 declare global {
     namespace NodeJS {
         interface ProcessEnv {
+            FRONTEND_URL: string;
+
             MONGODB_DATABASE_KEY: string;
 
             DATABASE_URI: string;
