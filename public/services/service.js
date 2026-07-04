@@ -26,6 +26,7 @@ const authorizedRequest = async (url, options) => {
         if (!url) throw new Error('No URL.');
 
         if (!options) options = { method: "GET" };
+        if (!options.method) options.method = "GET";
         if (!options.headers) options.headers = {};
 
         options.headers['authorization'] = 'Bearer ' + token;

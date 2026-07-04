@@ -12,16 +12,52 @@ export default class StaffProductView extends StaffBaseView {
         this.view.classList.add('staff-product-view');
         this.view.innerHTML = staffProductViewTemplate();
 
-        this.form = this.view.querySelector('#form');
-        this.name = this.form.querySelector('#name');
-        this.price = this.form.querySelector('#price');
-        this.reward = this.form.querySelector('#reward');
-        this.exchange = this.form.querySelector('#exchange');
-        this.image = this.form.querySelector('#image');
+        this.name = this.view.querySelector('#name');
+        this.price = this.view.querySelector('#price');
+        this.reward = this.view.querySelector('#reward');
+        this.exchange = this.view.querySelector('#exchange');
+        this.image = this.view.querySelector('#image');
 
-        this.form.addEventListener('submit', (event) =>{
+        this.formName = this.view.querySelector('#form-name');
+        this.formPrice = this.view.querySelector('#form-price');
+        this.formReward = this.view.querySelector('#form-reward');
+        this.formExchange = this.view.querySelector('#form-exchange');
+        this.formImage = this.view.querySelector('#form-image');
+
+        this.spinner = new AppWaitingPopup();
+
+        this.formName.addEventListener('submit', async (event) => {
             event.preventDefault();
-            window.alert('FUNCIÓN NO IMPLEMENTADA.');
+            try {
+                window.app.append(this.spinner);
+                await productsService.update.name(this.meta.data._id, this.name.value);
+                window.alert('Nombre del producto actualizado correctamente.');
+            } catch (error) {
+                console.error(error);
+                window.alert(error.message);
+            } finally {
+                this.spinner.remove();
+            };
+        });
+
+        this.formPrice.addEventListener('submit', (event) => {
+            event.preventDefault();
+            console.log('FORMULARIO PRICE');
+        });
+
+        this.formReward.addEventListener('submit', (event) => {
+            event.preventDefault();
+            console.log('FORMULARIO RECOMPENSA');
+        });
+
+        this.formExchange.addEventListener('submit', (event) => {
+            event.preventDefault();
+            console.log('FORMULARIO CANJEAR');
+        });
+
+        this.formImage.addEventListener('submit', (event) => {
+            event.preventDefault();
+            console.log('FORMULARIO IMAGEN');
         });
     };
 
@@ -46,7 +82,10 @@ export default class StaffProductView extends StaffBaseView {
     };
 
     draw (product) {
-        // if (product.image) this.image.src = product.image.url;
+        this.name.value = product.name;
+        this.price.value = product.price;
+        this.reward.value = product.reward_points;
+        this.exchange.value = product.exchange_points;
         console.log(product);
     };
 };

@@ -14,4 +14,6 @@ productsRouter.get('/exchange/:_id', authorizeRequest, productsController.exchan
 
 productsRouter.post('/', authorizeStaff, upload.single('product-image'), productsController.post);
 
+productsRouter.post('/update/:_id/name', authorizeStaff, productsController.update.name);
+
 export default productsRouter;

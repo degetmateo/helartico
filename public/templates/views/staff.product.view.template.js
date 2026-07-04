@@ -4,33 +4,44 @@ export default () => {
 
         <main class="main">
             <div class="container">
-                <form id="form" class="form">
+                <form id="form-name" class="form">
+                    <span class="light-text">Editar el nombre.</span>
                     <div class="input-container">
-                        <span class="light-text">Editar el nombre.</span>
                         <input id="name" class="input" type="text" placeholder="Nombre del producto" required />
+                        <button class="button" type="submit">Editar</button>
                     </div>
+                </form>
 
+                <form id="form-price" class="form">
+                    <span class="light-text">Editar el precio.</span>
                     <div class="input-container">
-                        <span class="light-text">Editar el precio.</span>
                         <input id="price" class="input" type="number" min="0" placeholder="Precio del producto" required />
+                        <button class="button" type="submit">Editar</button>
                     </div>
+                </form>
 
+                <form id="form-reward" class="form">
+                    <span class="light-text">Editar los puntos que se dan al comprarlo.</span>
                     <div class="input-container">
-                        <span class="light-text">Editar los puntos que se dan al comprarlo.</span>
                         <input id="reward" class="input" type="number" min="0" placeholder="Puntos de recompensa" required />
+                        <button class="button" type="submit">Editar</button>
                     </div>
+                </form>
 
+                <form id="form-exchange" class="form">
+                    <span class="light-text">Editar los puntos para canjearlo.</span>
                     <div class="input-container">
-                        <span class="light-text">Editar los puntos para canjearlo.</span>
                         <input id="exchange" class="input" type="number" min="0" placeholder="Puntos para canjear" required />
+                        <button class="button" type="submit">Editar</button>
                     </div>
+                </form>
 
+                <form id="form-image" class="form">
+                    <span class="light-text">Actualizar imagen del producto. Se reemplazará sobre la que tiene actualmente.</span>
                     <div class="input-container">
-                        <span class="light-text">Actualizar imagen del producto.</span>
                         <input id="image" class="input" type="file" accept="image/*" required />
+                        <button class="button" type="submit">Editar</button>
                     </div>
-
-                    <button type="submit" class="button">Actualizar Producto</button>
                 </form>
             </div>
         </main>

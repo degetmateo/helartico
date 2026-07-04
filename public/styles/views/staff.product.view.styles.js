@@ -12,14 +12,18 @@ export default () => {
             .staff-product-view .form {
                 display:flex;
                 flex-direction: column;
-                gap:10px;
+                gap: 5px;
                 padding: 10px;
             }
 
             .staff-product-view .form .input-container {
                 display:flex;
-                flex-direction:column;
-                gap:5px;
+                flex-direction: row;
+                gap:10px;
+            }
+
+            .staff-product-view .form .input-container .input {
+                width: 100%;
             }
         </style>
     `;

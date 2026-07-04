@@ -1,9 +1,11 @@
 import productsServiceGet from "./products/products.service.get.js";
-import productsServiceUpdate from "./products/products.service.update.js";
+import productsServiceUpdateName from "./products/products.service.update.name.js";
 
 const productsService = {
     get: productsServiceGet,
-    update: productsServiceUpdate
+    update: {
+        name: productsServiceUpdateName
+    }
 };
 
 export default productsService;
