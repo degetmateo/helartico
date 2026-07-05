@@ -40,24 +40,61 @@ export default class StaffProductView extends StaffBaseView {
             };
         });
 
-        this.formPrice.addEventListener('submit', (event) => {
+        this.formPrice.addEventListener('submit', async (event) => {
             event.preventDefault();
-            console.log('FORMULARIO PRICE');
+            try {
+                window.app.append(this.spinner);
+                await productsService.update.price(this.meta.data._id, this.price.value);
+                window.alert('Precio del producto actualizado correctamente.');
+            } catch (error) {
+                console.error(error);
+                window.alert(error.message);
+            } finally {
+                this.spinner.remove();
+            };
         });
 
-        this.formReward.addEventListener('submit', (event) => {
+        this.formReward.addEventListener('submit', async (event) => {
             event.preventDefault();
-            console.log('FORMULARIO RECOMPENSA');
+            try {
+                window.app.append(this.spinner);
+                await productsService.update.reward(this.meta.data._id, this.reward.value);
+                window.alert('Recompensa del producto actualizada correctamente.');
+            } catch (error) {
+                console.error(error);
+                window.alert(error.message);
+            } finally {
+                this.spinner.remove();
+            };
         });
 
-        this.formExchange.addEventListener('submit', (event) => {
+        this.formExchange.addEventListener('submit', async (event) => {
             event.preventDefault();
-            console.log('FORMULARIO CANJEAR');
+            try {
+                window.app.append(this.spinner);
+                await productsService.update.exchange(this.meta.data._id, this.exchange.value);
+                window.alert('Puntos de canje del producto actualizada correctamente.');
+            } catch (error) {
+                console.error(error);
+                window.alert(error.message);
+            } finally {
+                this.spinner.remove();
+            };
         });
 
-        this.formImage.addEventListener('submit', (event) => {
+        this.formImage.addEventListener('submit', async (event) => {
             event.preventDefault();
-            console.log('FORMULARIO IMAGEN');
+            try {
+                window.app.append(this.spinner);
+                await productsService.update.image(this.meta.data._id, this.image.files[0]);
+                this.formImage.reset();
+                window.alert('Imagen del producto actualizada correctamente.');
+            } catch (error) {
+                console.error(error);
+                window.alert(error.message);
+            } finally {
+                this.spinner.remove();
+            };
         });
     };
 

@@ -1,12 +1,11 @@
 import { Request, Response } from "express";
 import * as uuid from 'uuid';
-import { v2 as cloudinary } from 'cloudinary';
-import stream from 'stream';
 import { responseError, responseOk } from "../../helpers/response.helper.js";
 import InvalidArgumentError from "../../errors/invalidargument.error.js";
 import { RESPONSES } from "../../static/responses.js";
 import { mongoDb } from "../../database/mongo.js";
 import { Document, UUID } from "mongodb";
+import cloudinaryService from "../../services/cloudinary.service.js";
 
 const productsControllerPost = async (req: Request, res: Response) => {
     try {
@@ -22,21 +21,7 @@ const productsControllerPost = async (req: Request, res: Response) => {
         if (!rewardPoints || rewardPoints < 0) throw new InvalidArgumentError('Puntos de recompensa invalidos.');
         if (!exchangePoints || exchangePoints < 0) throw new InvalidArgumentError('Puntos para canjear invalidos.');
 
-        const uploadToCloudinary = (buffer: Buffer) => {
-            return new Promise((resolve, reject) => {
-                const cloudinaryStream = cloudinary.uploader.upload_stream(
-                    { folder: 'helartico' },
-                    (error, result) => {
-                        if (error) return reject(error);
-                        resolve(result);
-                    }
-                );
-
-                stream.Readable.from(buffer).pipe(cloudinaryStream);
-            }); 
-        };
-
-        const result: any = await uploadToCloudinary(req.file.buffer);
+        const result: any = await cloudinaryService.upload(req.file.buffer);
 
         const collection = mongoDb.collection('products');
 

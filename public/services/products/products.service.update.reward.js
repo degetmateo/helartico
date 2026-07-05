@@ -1,13 +1,13 @@
 import service from "../service.js";
 
-const productsServiceUpdateName = async (_id, name) => {
-    const url = `/api/products/update/${_id}/name`;
+const productsServiceUpdateReward = async (_id, reward) => {
+    const url = `/api/products/update/${_id}/reward`;
     const options = {
         method: "PUT",
         headers: { "content-type": "application/json" },
-        body: JSON.stringify({ name })
+        body: JSON.stringify({ reward })
     };
     return await service.authorizedRequest(url, options);
 };
 
-export default productsServiceUpdateName;
+export default productsServiceUpdateReward;
