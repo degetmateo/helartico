@@ -10,18 +10,6 @@ export default class StaffView extends StaffBaseView {
         super();
         this.view.classList.add('staff');
         this.view.innerHTML = staffViewTemplate();
-
-        this.view.querySelector('#button-validate').addEventListener('click', (event) => {
-            router.navigateTo('/staff/validate-code');
-        });
-
-        this.view.querySelector('#button-new').addEventListener('click', (event) => {
-            router.navigateTo('/staff/new-product');
-        });
-
-        this.view.querySelector('#button-list').addEventListener('click', (event) => {
-            router.navigateTo('/staff/products');
-        });
     };
 
     async init () {

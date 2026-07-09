@@ -6,7 +6,6 @@ export default () => {
         </div>
         <div class="app-header-right">
             <span id="points" class="points"><span id="app-header-number" class="number">0</span> PUNTOS</span>
-            <i id="reload" class="fa-solid fa-arrows-rotate app-header-icon reload"></i>
         </div>
     `;
 };

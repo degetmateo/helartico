@@ -2,6 +2,7 @@ import CodesView from "./views/codes.view.js";
 import ErrorView from "./views/error.view.js";
 import HomeView from "./views/home.view.js";
 import LandingView from "./views/landing.view.js";
+import ManagePointsView from "./views/managePoints.view.js";
 import ProfileView from "./views/profile.view.js";
 import SignInView from "./views/signin.view.js";
 import SignUpView from "./views/signup.view.js";
@@ -33,7 +34,8 @@ class Router {
             staff_validate_code: new StaffValidateCodeView(),
             staff_new_product: new StaffNewProductView(),
             staff_products: new StaffProductsView(),
-            staff_product: new StaffProductView()
+            staff_product: new StaffProductView(),
+            manage_points: new ManagePointsView()
         };
 
         this.router
@@ -49,7 +51,16 @@ class Router {
             .on('/staff/new-product', () => this.views.staff_new_product.init())
             .on('/staff/products', () => this.views.staff_products.init())
             .on('/staff/products/:_id', (meta) => this.views.staff_product.init(meta))
+            .on('/staff/manage-points', () => this.views.manage_points.init())
             .notFound(() => this.views.error.init());
+
+        window.removeEventListener('click', (event) => this.goRoute(event));
+        window.addEventListener('click', (event) => this.goRoute(event));
+    };
+
+    goRoute (event) {
+        const route = event.target.getAttribute('route');
+        if (route) this.navigateTo(route);
     };
 
     goToNotFound () {

@@ -16,10 +16,10 @@ class AppHeader extends HTMLElement {
             router.goBack();
         });
 
-        this.querySelector('#reload').addEventListener('click', (event) => {
-            event.preventDefault();
-            router.reload();
-        });
+        // this.querySelector('#reload').addEventListener('click', (event) => {
+        //     event.preventDefault();
+        //     router.reload();
+        // });
 
         this.pointsNumber = this.querySelector('#app-header-number');
         this.memberName = this.querySelector('#app-header-name');

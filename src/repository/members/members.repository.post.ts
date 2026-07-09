@@ -40,6 +40,7 @@ const membersRepositoryPost = async (data: {
             _id: new UUID(_id) as any,
             names: data.names,
             surnames: data.surnames,
+            dni: data.dni,
             points: 0
         });
 
