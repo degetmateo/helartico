@@ -1,0 +1,25 @@
+{
+  "name": "helartico",
+  "version": "1.0.0",
+  "description": "Sistema de Fidelidad y Recompensas Helartico - Helados & Café (PWA + API)",
+  "scripts": {
+    "dev:server": "pnpm --filter helartico-server dev",
+    "dev:client": "pnpm --filter client dev",
+    "build:server": "pnpm --filter helartico-server build",
+    "build:client": "pnpm --filter client build",
+    "test:server": "pnpm --filter helartico-server test",
+    "test:client": "pnpm --filter client test",
+    "test": "pnpm -r test",
+    "seed:server": "pnpm --filter helartico-server seed"
+  },
+  "keywords": [
+    "helartico",
+    "loyalty",
+    "rewards",
+    "pwa",
+    "peaa",
+    "clean-architecture"
+  ],
+  "author": "Helartico Team",
+  "license": "ISC"
+}

@@ -1,0 +1,7 @@
+packages:
+  - "server"
+  - "client"
+allowBuilds:
+  esbuild: true
+minimumReleaseAgeExclude:
+  - lucide-react@1.62.0

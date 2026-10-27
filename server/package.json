@@ -1,0 +1,49 @@
+{
+  "name": "helartico-server",
+  "version": "1.0.0",
+  "description": "Backend API for Helartico Loyalty & Rewards PWA",
+  "main": "dist/index.js",
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "build": "tsc",
+    "test": "vitest run src",
+    "test:watch": "vitest src",
+    "seed": "tsx src/infrastructure/database/seed.ts",
+    "start": "node dist/index.js"
+  },
+  "keywords": [
+    "helartico",
+    "loyalty",
+    "rewards",
+    "pwa",
+    "peaa",
+    "clean-architecture"
+  ],
+  "author": "Helartico Team",
+  "license": "ISC",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cloudinary": "^2.11.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.9.5",
+    "multer": "^2.5.0",
+    "web-push": "^3.6.7"
+  },
+  "devDependencies": {
+    "@types/bcryptjs": "^2.4.6",
+    "@types/cors": "^2.8.17",
+    "@types/express": "^4.17.21",
+    "@types/jsonwebtoken": "^9.0.8",
+    "@types/multer": "^2.3.0",
+    "@types/node": "^22.10.7",
+    "@types/supertest": "^7.2.1",
+    "@types/web-push": "^3.6.4",
+    "supertest": "^7.3.1",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.3",
+    "vitest": "^5.0.5"
+  }
+}
