@@ -7,6 +7,8 @@
     "dev:client": "pnpm --filter client dev",
     "build:server": "pnpm --filter helartico-server build",
     "build:client": "pnpm --filter client build",
+    "preview:client": "pnpm --filter client preview",
+    "start:server": "pnpm --filter helartico-server start",
     "test:server": "pnpm --filter helartico-server test",
     "test:client": "pnpm --filter client test",
     "test": "pnpm -r test",
