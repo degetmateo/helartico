@@ -60,7 +60,7 @@ describe("Auth Use Cases", () => {
       password: "secretpassword123",
     });
     expect(dupEmail.isFailure).toBe(true);
-    expect(dupEmail.error).toContain("email already exists");
+    expect(dupEmail.error).toContain("correo electrónico");
   });
 
   it("should create staff and allow staff login", async () => {
@@ -81,5 +81,25 @@ describe("Auth Use Cases", () => {
 
     expect(loginRes.isSuccess).toBe(true);
     expect(loginRes.getValue().user.role).toBe("STAFF");
+  });
+
+  it("should register a customer without phone number successfully", async () => {
+    const regResult = await registerCustomerUseCase.execute({
+      name: "Martín Sin Teléfono",
+      email: "martin@example.com",
+      documentNumber: "40111222",
+      password: "secretpassword123",
+    });
+
+    expect(regResult.isSuccess).toBe(true);
+    const customer = regResult.getValue();
+    expect(customer.name).toBe("Martín Sin Teléfono");
+    expect(customer.phone).toBe("");
+
+    const loginResult = await authenticateUserUseCase.execute({
+      email: "martin@example.com",
+      password: "secretpassword123",
+    });
+    expect(loginResult.isSuccess).toBe(true);
   });
 });

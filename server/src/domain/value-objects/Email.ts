@@ -14,11 +14,11 @@ export class Email {
 
   public static create(email: string): Result<Email> {
     if (!email || typeof email !== "string") {
-      return Result.fail<Email>("Email is required.");
+      return Result.fail<Email>("El correo electrónico es obligatorio.");
     }
     const trimmed = email.trim().toLowerCase();
     if (!Email.EMAIL_REGEX.test(trimmed)) {
-      return Result.fail<Email>("Invalid email address format.");
+      return Result.fail<Email>("El formato del correo electrónico no es válido.");
     }
     return Result.ok<Email>(new Email(trimmed));
   }

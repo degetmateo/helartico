@@ -118,7 +118,7 @@ export const PwaPromptModal: React.FC<PwaPromptModalProps> = ({ isOpen, onClose 
             <ol style={{ paddingLeft: 18 }}>
               <li>En <strong>Chrome o Edge</strong>, busca el ícono de instalación (<strong>⊕</strong> o pantalla con flecha) a la derecha de la barra de direcciones.</li>
               <li>O presiona el menú de <strong>tres puntos (⋮)</strong> &gt; <em>"Guardar y compartir"</em> &gt; <em>"Instalar Helartico"</em>.</li>
-              <li>Para que el navegador permita la instalación en PC, asegúrate de acceder vía <code>http://localhost:5173</code>.</li>
+              <li>Una vez instalada, podrás abrir Helartico directamente desde tu escritorio o barra de tareas como una aplicación nativa.</li>
             </ol>
           )}
         </div>

@@ -19,10 +19,10 @@ export class CreateStaffUseCase {
 
   public async execute(dto: CreateStaffDTO): Promise<Result<Staff>> {
     if (!dto.name || dto.name.trim().length < 2) {
-      return Result.fail<Staff>("Staff name must have at least 2 characters.");
+      return Result.fail<Staff>("El nombre del personal debe tener al menos 2 caracteres.");
     }
     if (!dto.password || dto.password.length < 6) {
-      return Result.fail<Staff>("Password must be at least 6 characters long.");
+      return Result.fail<Staff>("La contraseña debe tener al menos 6 caracteres.");
     }
 
     const emailResult = Email.create(dto.email);
@@ -31,7 +31,7 @@ export class CreateStaffUseCase {
 
     const existingByEmail = await this.staffRepo.findByEmail(email);
     if (existingByEmail) {
-      return Result.fail<Staff>("A staff member with this email already exists.");
+      return Result.fail<Staff>("Ya existe un miembro del personal registrado con este correo electrónico.");
     }
 
     let docNumber: DocumentNumber | undefined;
@@ -42,7 +42,7 @@ export class CreateStaffUseCase {
 
       const existingByDoc = await this.staffRepo.findByDocumentNumber(docNumber);
       if (existingByDoc) {
-        return Result.fail<Staff>("A staff member with this document number already exists.");
+        return Result.fail<Staff>("Ya existe un miembro del personal registrado con este número de documento.");
       }
     }
 

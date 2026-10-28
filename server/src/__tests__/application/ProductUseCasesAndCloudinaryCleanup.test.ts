@@ -142,10 +142,10 @@ describe("Product Editing and Cloudinary Image Cleanup UseCases", () => {
       pointsRequired: 100,
     });
     expect(updateRes.isFailure).toBe(true);
-    expect(updateRes.error).toBe("Product not found.");
+    expect(updateRes.error).toBe("Producto no encontrado.");
 
     const deleteRes = await deleteUseCase.execute("unknown_id");
     expect(deleteRes.isFailure).toBe(true);
-    expect(deleteRes.error).toBe("Product not found.");
+    expect(deleteRes.error).toBe("Producto no encontrado.");
   });
 });

@@ -7,7 +7,7 @@ export class UploadController {
 
   public uploadImage = async (req: AuthenticatedRequest, res: Response): Promise<void> => {
     if (!req.file) {
-      res.status(400).json({ success: false, error: "No image file provided." });
+      res.status(400).json({ success: false, error: "No se ha proporcionado ningún archivo de imagen." });
       return;
     }
 
@@ -20,7 +20,7 @@ export class UploadController {
     } catch (error: any) {
       res.status(500).json({
         success: false,
-        error: error.message || "Failed to upload image.",
+        error: error.message || "No se pudo subir la imagen al servidor.",
       });
     }
   };

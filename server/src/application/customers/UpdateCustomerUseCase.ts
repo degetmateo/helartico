@@ -20,7 +20,7 @@ export class UpdateCustomerUseCase {
   public async execute(dto: UpdateCustomerDTO): Promise<Result<Customer>> {
     const customer = await this.customerRepo.findById(dto.customerId);
     if (!customer) {
-      return Result.fail<Customer>("Customer not found.");
+      return Result.fail<Customer>("Cliente no encontrado.");
     }
 
     let emailVal: Email | undefined;
@@ -29,7 +29,7 @@ export class UpdateCustomerUseCase {
       if (emailRes.isFailure) return Result.fail<Customer>(emailRes.error);
       const existing = await this.customerRepo.findByEmail(emailRes.getValue());
       if (existing && existing.id !== customer.id) {
-        return Result.fail<Customer>("Email is already in use by another customer.");
+        return Result.fail<Customer>("El correo electrónico ya está en uso por otro cliente.");
       }
       emailVal = emailRes.getValue();
     }
@@ -40,14 +40,14 @@ export class UpdateCustomerUseCase {
       if (docRes.isFailure) return Result.fail<Customer>(docRes.error);
       const existing = await this.customerRepo.findByDocumentNumber(docRes.getValue());
       if (existing && existing.id !== customer.id) {
-        return Result.fail<Customer>("Document number is already in use by another customer.");
+        return Result.fail<Customer>("El número de documento ya está en uso por otro cliente.");
       }
       docVal = docRes.getValue();
     }
 
     const updatedName = dto.name !== undefined ? dto.name.trim() : customer.name;
     if (updatedName.length < 2) {
-      return Result.fail<Customer>("Name must have at least 2 characters.");
+      return Result.fail<Customer>("El nombre debe tener al menos 2 caracteres.");
     }
 
     customer.updateProfile(
@@ -59,7 +59,7 @@ export class UpdateCustomerUseCase {
 
     if (dto.password && dto.password.trim().length > 0) {
       if (dto.password.length < 6) {
-        return Result.fail<Customer>("Password must be at least 6 characters long.");
+        return Result.fail<Customer>("La contraseña debe tener al menos 6 caracteres.");
       }
       const newHash = await BcryptPasswordHasher.hash(dto.password);
       customer.changePassword(newHash);

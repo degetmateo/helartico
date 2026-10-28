@@ -10,7 +10,7 @@ export class ErrorHandlerMiddleware {
     console.error("[ServerError]:", err?.message || "Unknown error");
     res.status(500).json({
       success: false,
-      error: "Internal server error. Please try again later.",
+      error: "Ocurrió un error interno en el servidor. Por favor, intenta de nuevo más tarde.",
     });
   }
 }

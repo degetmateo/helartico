@@ -201,7 +201,7 @@ describe("Staff Hierarchy and Permissions (Admin vs Employee)", () => {
 
       expect(res.status).toBe(403);
       expect(res.body.success).toBe(false);
-      expect(res.body.error).toContain("Administrator privileges required");
+      expect(res.body.error).toContain("permisos de Administrador");
     });
 
     it("should BLOCK CUSTOMER from staff routes (403)", async () => {
@@ -241,7 +241,7 @@ describe("Staff Hierarchy and Permissions (Admin vs Employee)", () => {
 
       expect(res.status).toBe(403);
       expect(res.body.success).toBe(false);
-      expect(res.body.error).toContain("Administrator privileges required");
+      expect(res.body.error).toContain("permisos de Administrador");
     });
 
     it("should allow ADMIN to update an employee", async () => {
@@ -265,7 +265,7 @@ describe("Staff Hierarchy and Permissions (Admin vs Employee)", () => {
 
       expect(res.status).toBe(400);
       expect(res.body.success).toBe(false);
-      expect(res.body.error).toContain("cannot delete your own administrator account");
+      expect(res.body.error).toContain("No puedes eliminar tu propia cuenta de administrador");
     });
 
     it("should allow ADMIN to delete an employee", async () => {

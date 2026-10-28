@@ -51,7 +51,7 @@ export const ProfileView: React.FC = () => {
           <Phone size={18} color="var(--color-text-muted)" />
           <div>
             <div style={{ fontSize: "0.75rem", color: "var(--color-text-muted)" }}>Teléfono</div>
-            <div style={{ fontWeight: 600, fontSize: "0.9rem" }}>{user.phone}</div>
+            <div style={{ fontWeight: 600, fontSize: "0.9rem" }}>{user.phone || "No especificado"}</div>
           </div>
         </div>
 

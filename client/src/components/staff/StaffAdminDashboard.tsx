@@ -1,12 +1,13 @@
 import React, { useState } from "react";
-import { LogOut, Package, QrCode, Shield, Users } from "lucide-react";
+import { Activity, LogOut, Package, QrCode, Shield, Users } from "lucide-react";
 import { useAuth } from "../../context/AuthContext";
+import { StaffAuditLogsTab } from "./StaffAuditLogsTab";
 import { StaffCustomersTab } from "./StaffCustomersTab";
 import { StaffManagementTab } from "./StaffManagementTab";
 import { StaffProductsTab } from "./StaffProductsTab";
 import { StaffValidatorTab } from "./StaffValidatorTab";
 
-type StaffTab = "VALIDATOR" | "CUSTOMERS" | "PRODUCTS" | "STAFF_MANAGEMENT";
+type StaffTab = "VALIDATOR" | "CUSTOMERS" | "PRODUCTS" | "STAFF_MANAGEMENT" | "AUDIT_LOGS";
 
 export const StaffAdminDashboard: React.FC = () => {
   const { user, logout } = useAuth();
@@ -127,22 +128,41 @@ export const StaffAdminDashboard: React.FC = () => {
 
         {/* Tab strictly reserved for ADMINISTRATOR */}
         {isAdmin && (
-          <button
-            onClick={() => setActiveTab("STAFF_MANAGEMENT")}
-            style={{
-              padding: "10px 16px",
-              borderBottom: activeTab === "STAFF_MANAGEMENT" ? "3px solid var(--color-accent)" : "none",
-              color: activeTab === "STAFF_MANAGEMENT" ? "var(--color-accent)" : "var(--color-text-muted)",
-              fontWeight: 700,
-              fontSize: "0.9rem",
-              display: "flex",
-              alignItems: "center",
-              gap: 6,
-              whiteSpace: "nowrap",
-            }}
-          >
-            <Shield size={18} /> Gestión de Personal
-          </button>
+          <>
+            <button
+              onClick={() => setActiveTab("STAFF_MANAGEMENT")}
+              style={{
+                padding: "10px 16px",
+                borderBottom: activeTab === "STAFF_MANAGEMENT" ? "3px solid var(--color-accent)" : "none",
+                color: activeTab === "STAFF_MANAGEMENT" ? "var(--color-accent)" : "var(--color-text-muted)",
+                fontWeight: 700,
+                fontSize: "0.9rem",
+                display: "flex",
+                alignItems: "center",
+                gap: 6,
+                whiteSpace: "nowrap",
+              }}
+            >
+              <Shield size={18} /> Gestión de Personal
+            </button>
+
+            <button
+              onClick={() => setActiveTab("AUDIT_LOGS")}
+              style={{
+                padding: "10px 16px",
+                borderBottom: activeTab === "AUDIT_LOGS" ? "3px solid var(--color-accent)" : "none",
+                color: activeTab === "AUDIT_LOGS" ? "var(--color-accent)" : "var(--color-text-muted)",
+                fontWeight: 700,
+                fontSize: "0.9rem",
+                display: "flex",
+                alignItems: "center",
+                gap: 6,
+                whiteSpace: "nowrap",
+              }}
+            >
+              <Activity size={18} /> Registros del Sistema
+            </button>
+          </>
         )}
       </div>
 
@@ -151,6 +171,7 @@ export const StaffAdminDashboard: React.FC = () => {
         {activeTab === "CUSTOMERS" && <StaffCustomersTab />}
         {activeTab === "PRODUCTS" && <StaffProductsTab />}
         {activeTab === "STAFF_MANAGEMENT" && isAdmin && <StaffManagementTab />}
+        {activeTab === "AUDIT_LOGS" && isAdmin && <StaffAuditLogsTab />}
       </main>
     </div>
   );

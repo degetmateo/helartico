@@ -15,7 +15,7 @@ describe("Domain Value Objects", () => {
     it("should reject invalid email format", () => {
       const result = Email.create("not-an-email");
       expect(result.isFailure).toBe(true);
-      expect(result.error).toContain("Invalid email");
+      expect(result.error).toContain("correo electrónico no es válido");
     });
   });
 

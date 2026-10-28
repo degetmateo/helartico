@@ -1,9 +1,11 @@
+import { AuditLog } from "../../domain/entities/AuditLog";
 import { Customer } from "../../domain/entities/Customer";
 import { PointsTransaction } from "../../domain/entities/PointsTransaction";
 import { Product } from "../../domain/entities/Product";
 import { RedemptionCode } from "../../domain/entities/RedemptionCode";
 import { Staff } from "../../domain/entities/Staff";
 import { PaginatedResult, PaginationHelper, PaginationOptions } from "../../core/Pagination";
+import { AuditLogSearchCriteria, IAuditLogRepository } from "../../domain/repositories/IAuditLogRepository";
 import { ICustomerRepository, CustomerSearchCriteria } from "../../domain/repositories/ICustomerRepository";
 import { IProductRepository, ProductSearchCriteria } from "../../domain/repositories/IProductRepository";
 import { IRedemptionCodeRepository } from "../../domain/repositories/IRedemptionCodeRepository";
@@ -225,5 +227,54 @@ export class InMemoryTransactionRepository implements ITransactionRepository {
   }
   async findByCustomerId(customerId: string): Promise<PointsTransaction[]> {
     return this.transactions.filter((t) => t.customerId === customerId);
+  }
+}
+
+export class InMemoryAuditLogRepository implements IAuditLogRepository {
+  public logs: AuditLog[] = [];
+
+  async save(auditLog: AuditLog): Promise<AuditLog> {
+    const withId = new AuditLog({
+      id: auditLog.id || `audit_${Date.now()}_${Math.random()}`,
+      action: auditLog.action,
+      category: auditLog.category,
+      actorId: auditLog.actorId,
+      actorName: auditLog.actorName,
+      actorEmail: auditLog.actorEmail,
+      actorRole: auditLog.actorRole,
+      targetId: auditLog.targetId,
+      targetName: auditLog.targetName,
+      targetType: auditLog.targetType,
+      description: auditLog.description,
+      details: auditLog.details,
+      createdAt: auditLog.createdAt,
+    });
+    this.logs.unshift(withId);
+    return withId;
+  }
+
+  async search(criteria: AuditLogSearchCriteria): Promise<PaginatedResult<AuditLog>> {
+    const filtered = this.logs.filter((log) => {
+      if (criteria.category && log.category !== criteria.category) return false;
+      if (criteria.action && log.action !== criteria.action) return false;
+      if (criteria.actorRole && log.actorRole !== criteria.actorRole) return false;
+      if (criteria.actorId && log.actorId !== criteria.actorId) return false;
+      if (criteria.targetId && log.targetId !== criteria.targetId) return false;
+      if (criteria.searchTerm) {
+        const term = criteria.searchTerm.toLowerCase();
+        const matchesActor = log.actorName.toLowerCase().includes(term);
+        const matchesTarget = log.targetName ? log.targetName.toLowerCase().includes(term) : false;
+        const matchesDesc = log.description.toLowerCase().includes(term);
+        const matchesEmail = log.actorEmail ? log.actorEmail.toLowerCase().includes(term) : false;
+        if (!matchesActor && !matchesTarget && !matchesDesc && !matchesEmail) {
+          return false;
+        }
+      }
+      return true;
+    });
+
+    const { page, limit, skip } = PaginationHelper.normalize(criteria, 15);
+    const items = filtered.slice(skip, skip + limit);
+    return PaginationHelper.createPaginatedResult(items, filtered.length, page, limit);
   }
 }

@@ -9,14 +9,14 @@ export class AuthMiddleware {
   public static handle(req: AuthenticatedRequest, res: Response, next: NextFunction): void {
     const authHeader = req.headers.authorization;
     if (!authHeader || !authHeader.startsWith("Bearer ")) {
-      res.status(401).json({ success: false, error: "Access token missing or invalid." });
+      res.status(401).json({ success: false, error: "Sesión no válida o token de acceso ausente." });
       return;
     }
 
     const token = authHeader.substring(7);
     const payload = JwtTokenService.verifyToken(token);
     if (!payload) {
-      res.status(401).json({ success: false, error: "Expired or invalid token." });
+      res.status(401).json({ success: false, error: "La sesión ha expirado o el token no es válido." });
       return;
     }
 

@@ -8,7 +8,7 @@ export class GetCustomerByIdUseCase {
   public async execute(customerId: string): Promise<Result<Customer>> {
     const customer = await this.customerRepo.findById(customerId);
     if (!customer) {
-      return Result.fail<Customer>("Customer not found.");
+      return Result.fail<Customer>("Cliente no encontrado.");
     }
     return Result.ok<Customer>(customer);
   }

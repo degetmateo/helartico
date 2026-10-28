@@ -1,5 +1,16 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { Edit2, KeyRound, Loader2, PlusCircle, Search, UserPlus, X } from "lucide-react";
+import {
+  AlertTriangle,
+  ArrowRight,
+  Edit2,
+  KeyRound,
+  Loader2,
+  PlusCircle,
+  Search,
+  SlidersHorizontal,
+  UserPlus,
+  X,
+} from "lucide-react";
 import { useDebounce } from "../../hooks/useDebounce";
 import { useInfiniteScroll } from "../../hooks/useInfiniteScroll";
 import { ApiClient } from "../../services/apiClient";
@@ -16,10 +27,17 @@ export const StaffCustomersTab: React.FC = () => {
   const [loadingMore, setLoadingMore] = useState<boolean>(false);
   const [totalCount, setTotalCount] = useState<number>(0);
 
-  // Points Modal State
+  // Points Modal State (Add points)
   const [selectedCustForPoints, setSelectedCustForPoints] = useState<User | null>(null);
   const [pointsToAdd, setPointsToAdd] = useState<string>("");
   const [note, setNote] = useState<string>("");
+
+  // Set Arbitrary Points Modal State (Manual adjustment)
+  const [selectedCustForSetPoints, setSelectedCustForSetPoints] = useState<User | null>(null);
+  const [targetPoints, setTargetPoints] = useState<string>("");
+  const [adjustReason, setAdjustReason] = useState<string>("");
+  const [showSetConfirm, setShowSetConfirm] = useState<boolean>(false);
+  const [submittingSetPoints, setSubmittingSetPoints] = useState<boolean>(false);
 
   // New Customer Modal State
   const [showAddCustomer, setShowAddCustomer] = useState<boolean>(false);
@@ -135,6 +153,48 @@ export const StaffCustomersTab: React.FC = () => {
       fetchCustomers(1, debouncedSearch, false);
     } catch (err: any) {
       alert(err.message || "Error al sumar puntos");
+    }
+  };
+
+  const openSetPointsModal = (cust: User) => {
+    setSelectedCustForSetPoints(cust);
+    setTargetPoints((cust.pointsBalance ?? 0).toString());
+    setAdjustReason("");
+    setShowSetConfirm(false);
+  };
+
+  const handleRequestSetPoints = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!selectedCustForSetPoints || targetPoints === "") return;
+    const num = Number(targetPoints);
+    if (isNaN(num) || num < 0) {
+      alert("Los puntos deben ser un número entero mayor o igual a 0");
+      return;
+    }
+    setShowSetConfirm(true);
+  };
+
+  const handleConfirmSetPoints = async () => {
+    if (!selectedCustForSetPoints || targetPoints === "") return;
+    setSubmittingSetPoints(true);
+    try {
+      await ApiClient.request(`/customers/${selectedCustForSetPoints.id}/points`, {
+        method: "PUT",
+        body: JSON.stringify({
+          points: Number(targetPoints),
+          reason: adjustReason.trim() ? adjustReason.trim() : undefined,
+        }),
+      });
+      alert(`¡Saldo de puntos de ${selectedCustForSetPoints.name} establecido en ${targetPoints} pts con éxito!`);
+      setSelectedCustForSetPoints(null);
+      setShowSetConfirm(false);
+      setTargetPoints("");
+      setAdjustReason("");
+      fetchCustomers(1, debouncedSearch, false);
+    } catch (err: any) {
+      alert(err.message || "Error al establecer puntos");
+    } finally {
+      setSubmittingSetPoints(false);
     }
   };
 
@@ -302,7 +362,7 @@ export const StaffCustomersTab: React.FC = () => {
                 <div>
                   <div style={{ fontWeight: 700, fontSize: "0.95rem" }}>{c.name}</div>
                   <div style={{ fontSize: "0.8rem", color: "var(--color-text-muted)", marginTop: 2 }}>
-                    DNI: <strong>{c.documentNumber}</strong> • {c.email} • {c.phone}
+                    DNI: <strong>{c.documentNumber}</strong> • {c.email}{c.phone ? ` • ${c.phone}` : ""}
                   </div>
                 </div>
 
@@ -345,6 +405,25 @@ export const StaffCustomersTab: React.FC = () => {
                     }}
                   >
                     <PlusCircle size={15} /> Sumar Puntos
+                  </button>
+
+                  <button
+                    onClick={() => openSetPointsModal(c)}
+                    style={{
+                      background: "#FFF4E5",
+                      color: "#B76E00",
+                      border: "1px solid #FFE2B5",
+                      padding: "6px 10px",
+                      borderRadius: 8,
+                      fontSize: "0.82rem",
+                      fontWeight: 600,
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 4,
+                    }}
+                    title="Establecer saldo arbitrario (ajuste manual)"
+                  >
+                    <SlidersHorizontal size={14} /> Ajustar Saldo
                   </button>
                 </div>
               </div>
@@ -409,10 +488,9 @@ export const StaffCustomersTab: React.FC = () => {
               />
               <input
                 type="tel"
-                placeholder="Teléfono"
+                placeholder="Teléfono (Opcional)"
                 value={newPhone}
                 onChange={(e) => setNewPhone(e.target.value)}
-                required
                 style={{ padding: 10, borderRadius: 8, border: "1px solid var(--color-border)" }}
               />
               <input
@@ -485,12 +563,11 @@ export const StaffCustomersTab: React.FC = () => {
               </div>
 
               <div>
-                <label style={{ fontSize: "0.78rem", color: "var(--color-text-muted)" }}>Teléfono</label>
+                <label style={{ fontSize: "0.78rem", color: "var(--color-text-muted)" }}>Teléfono (Opcional)</label>
                 <input
                   type="tel"
                   value={editPhone}
                   onChange={(e) => setEditPhone(e.target.value)}
-                  required
                   style={{ width: "100%", padding: 10, borderRadius: 8, border: "1px solid var(--color-border)" }}
                 />
               </div>
@@ -605,7 +682,277 @@ export const StaffCustomersTab: React.FC = () => {
                   Acreditar
                 </button>
               </div>
+
+              <div style={{ textAlign: "center", marginTop: 6 }}>
+                <button
+                  type="button"
+                  onClick={() => {
+                    const c = selectedCustForPoints;
+                    setSelectedCustForPoints(null);
+                    openSetPointsModal(c);
+                  }}
+                  style={{
+                    background: "none",
+                    border: "none",
+                    color: "var(--color-accent)",
+                    fontSize: "0.8rem",
+                    textDecoration: "underline",
+                    cursor: "pointer",
+                  }}
+                >
+                  ¿Deseas fijar o corregir el saldo a un número exacto? Ajuste manual
+                </button>
+              </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* Modal: Set Arbitrary Points (Dangerous Action with Confirmation) */}
+      {selectedCustForSetPoints && (
+        <div className="modal-overlay" onClick={() => !submittingSetPoints && setSelectedCustForSetPoints(null)}>
+          <div className="modal-card" onClick={(e) => e.stopPropagation()}>
+            <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 10 }}>
+              <div
+                style={{
+                  background: "#FEECEB",
+                  color: "#B02A37",
+                  padding: 6,
+                  borderRadius: 8,
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <SlidersHorizontal size={18} />
+              </div>
+              <h3 style={{ fontSize: "1.1rem" }}>
+                Establecer Saldo de Puntos
+              </h3>
+            </div>
+
+            <div
+              style={{
+                background: "#FFF4E5",
+                border: "1px solid #FFE2B5",
+                borderRadius: 8,
+                padding: "10px 12px",
+                display: "flex",
+                gap: 10,
+                alignItems: "flex-start",
+                marginBottom: 14,
+              }}
+            >
+              <AlertTriangle size={18} color="#B76E00" style={{ flexShrink: 0, marginTop: 2 }} />
+              <div style={{ fontSize: "0.82rem", color: "#663C00", lineHeight: 1.4 }}>
+                <strong>Acción delicada:</strong> Esta función sobrescribe arbitrariamente el saldo total de puntos de{" "}
+                <strong>{selectedCustForSetPoints.name}</strong>. Úsala únicamente para corregir errores de suma o ajustes manuales autorizados.
+              </div>
+            </div>
+
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                background: "var(--color-bg)",
+                padding: "10px 12px",
+                borderRadius: 8,
+                marginBottom: 14,
+                fontSize: "0.88rem",
+              }}
+            >
+              <span style={{ color: "var(--color-text-muted)" }}>Saldo actual:</span>
+              <span style={{ fontWeight: 700, fontSize: "1rem", color: "var(--color-primary)" }}>
+                {selectedCustForSetPoints.pointsBalance ?? 0} pts
+              </span>
+            </div>
+
+            {!showSetConfirm ? (
+              <form onSubmit={handleRequestSetPoints} style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+                <div>
+                  <label style={{ fontSize: "0.8rem", fontWeight: 600, display: "block", marginBottom: 4 }}>
+                    Nuevo saldo total de puntos
+                  </label>
+                  <input
+                    type="number"
+                    min="0"
+                    step="1"
+                    placeholder="Ej. 150"
+                    value={targetPoints}
+                    onChange={(e) => setTargetPoints(e.target.value)}
+                    required
+                    style={{
+                      width: "100%",
+                      padding: 10,
+                      borderRadius: 8,
+                      border: "1px solid var(--color-border)",
+                      fontSize: "1rem",
+                      fontWeight: 600,
+                    }}
+                  />
+                  {targetPoints !== "" && !isNaN(Number(targetPoints)) && (
+                    <div style={{ fontSize: "0.78rem", marginTop: 4, color: "var(--color-text-muted)" }}>
+                      Diferencia resultante:{" "}
+                      <strong
+                        style={{
+                          color:
+                            Number(targetPoints) - (selectedCustForSetPoints.pointsBalance ?? 0) >= 0
+                              ? "var(--color-primary)"
+                              : "var(--color-alert)",
+                        }}
+                      >
+                        {Number(targetPoints) - (selectedCustForSetPoints.pointsBalance ?? 0) >= 0 ? "+" : ""}
+                        {Number(targetPoints) - (selectedCustForSetPoints.pointsBalance ?? 0)} pts
+                      </strong>
+                    </div>
+                  )}
+                </div>
+
+                <div>
+                  <label style={{ fontSize: "0.8rem", fontWeight: 600, display: "block", marginBottom: 4 }}>
+                    Motivo o justificativo del ajuste
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="Ej. Corrección por error de carga en caja"
+                    value={adjustReason}
+                    onChange={(e) => setAdjustReason(e.target.value)}
+                    style={{
+                      width: "100%",
+                      padding: 10,
+                      borderRadius: 8,
+                      border: "1px solid var(--color-border)",
+                      fontSize: "0.88rem",
+                    }}
+                  />
+                </div>
+
+                <div style={{ display: "flex", gap: 10, marginTop: 8 }}>
+                  <button
+                    type="button"
+                    onClick={() => setSelectedCustForSetPoints(null)}
+                    style={{
+                      flex: 1,
+                      padding: 10,
+                      border: "1px solid var(--color-border)",
+                      borderRadius: 8,
+                      fontWeight: 600,
+                    }}
+                  >
+                    Cancelar
+                  </button>
+                  <button
+                    type="submit"
+                    style={{
+                      flex: 1,
+                      padding: 10,
+                      background: "var(--color-accent)",
+                      color: "#fff",
+                      borderRadius: 8,
+                      fontWeight: 700,
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      gap: 6,
+                    }}
+                  >
+                    Continuar <ArrowRight size={16} />
+                  </button>
+                </div>
+
+                <div style={{ textAlign: "center", marginTop: 4 }}>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const c = selectedCustForSetPoints;
+                      setSelectedCustForSetPoints(null);
+                      setSelectedCustForPoints(c);
+                    }}
+                    style={{
+                      background: "none",
+                      border: "none",
+                      color: "var(--color-primary)",
+                      fontSize: "0.8rem",
+                      textDecoration: "underline",
+                      cursor: "pointer",
+                    }}
+                  >
+                    ¿Solo querías sumar puntos por compra? Acreditar puntos
+                  </button>
+                </div>
+              </form>
+            ) : (
+              <div
+                style={{
+                  background: "#FEECEB",
+                  border: "1.5px solid #F5C2C7",
+                  padding: 16,
+                  borderRadius: 10,
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: 12,
+                }}
+              >
+                <div style={{ display: "flex", alignItems: "center", gap: 8, color: "#842029" }}>
+                  <AlertTriangle size={20} />
+                  <strong style={{ fontSize: "0.95rem" }}>¿Confirmas este cambio directo de saldo?</strong>
+                </div>
+
+                <p style={{ fontSize: "0.85rem", color: "#66141D", lineHeight: 1.45, margin: 0 }}>
+                  Estás a punto de reemplazar el saldo de{" "}
+                  <strong>{selectedCustForSetPoints.name}</strong> (DNI: {selectedCustForSetPoints.documentNumber}) de{" "}
+                  <strong style={{ textDecoration: "line-through" }}>{selectedCustForSetPoints.pointsBalance ?? 0} pts</strong> a{" "}
+                  <strong style={{ fontSize: "0.95rem", color: "#842029" }}>{targetPoints} pts</strong>.
+                  <br />
+                  Esta acción quedará registrada en el historial de transacciones con tipo de ajuste manual.
+                </p>
+
+                <div style={{ display: "flex", gap: 10, marginTop: 4 }}>
+                  <button
+                    type="button"
+                    disabled={submittingSetPoints}
+                    onClick={() => setShowSetConfirm(false)}
+                    style={{
+                      flex: 1,
+                      padding: 10,
+                      border: "1px solid var(--color-border)",
+                      background: "#fff",
+                      borderRadius: 8,
+                      fontWeight: 600,
+                    }}
+                  >
+                    Volver y modificar
+                  </button>
+                  <button
+                    type="button"
+                    disabled={submittingSetPoints}
+                    onClick={handleConfirmSetPoints}
+                    style={{
+                      flex: 1,
+                      padding: 10,
+                      background: "#B02A37",
+                      color: "#fff",
+                      borderRadius: 8,
+                      fontWeight: 700,
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      gap: 6,
+                    }}
+                  >
+                    {submittingSetPoints ? (
+                      <>
+                        <Loader2 size={16} className="spin-animation" />
+                        Guardando...
+                      </>
+                    ) : (
+                      "Sí, Confirmar Ajuste"
+                    )}
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       )}

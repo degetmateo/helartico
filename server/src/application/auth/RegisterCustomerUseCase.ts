@@ -9,7 +9,7 @@ import { BcryptPasswordHasher } from "../../infrastructure/security/BcryptPasswo
 export interface RegisterCustomerDTO {
   name: string;
   email: string;
-  phone: string;
+  phone?: string;
   documentNumber: string;
   password: string;
   initialPoints?: number;
@@ -20,10 +20,10 @@ export class RegisterCustomerUseCase {
 
   public async execute(dto: RegisterCustomerDTO): Promise<Result<Customer>> {
     if (!dto.name || dto.name.trim().length < 2) {
-      return Result.fail<Customer>("Customer name must have at least 2 characters.");
+      return Result.fail<Customer>("El nombre debe tener al menos 2 caracteres.");
     }
     if (!dto.password || dto.password.length < 6) {
-      return Result.fail<Customer>("Password must be at least 6 characters long.");
+      return Result.fail<Customer>("La contraseña debe tener al menos 6 caracteres.");
     }
 
     const emailResult = Email.create(dto.email);
@@ -36,12 +36,12 @@ export class RegisterCustomerUseCase {
 
     const existingByEmail = await this.customerRepo.findByEmail(email);
     if (existingByEmail) {
-      return Result.fail<Customer>("A customer with this email already exists.");
+      return Result.fail<Customer>("Ya existe un cliente registrado con este correo electrónico.");
     }
 
     const existingByDoc = await this.customerRepo.findByDocumentNumber(docNumber);
     if (existingByDoc) {
-      return Result.fail<Customer>("A customer with this document number already exists.");
+      return Result.fail<Customer>("Ya existe un cliente registrado con este número de documento.");
     }
 
     const passwordHash = await BcryptPasswordHasher.hash(dto.password);
@@ -50,7 +50,7 @@ export class RegisterCustomerUseCase {
     const newCustomer = new Customer({
       name: dto.name,
       email,
-      phone: dto.phone,
+      phone: (dto.phone ?? "").trim(),
       documentNumber: docNumber,
       passwordHash,
       pointsBalance: initialPoints,

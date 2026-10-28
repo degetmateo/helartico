@@ -6,7 +6,7 @@ import { IUserDocument } from "../schemas/UserSchema";
 
 export class CustomerMapper {
   public static toDomain(doc: IUserDocument): Customer {
-    if (!doc.documentNumber || !doc.phone) {
+    if (!doc.documentNumber) {
       throw new Error(`Corrupt customer document: ${doc._id}`);
     }
 
@@ -22,7 +22,7 @@ export class CustomerMapper {
       id: doc._id.toString(),
       name: doc.name,
       email: emailResult.getValue(),
-      phone: doc.phone,
+      phone: doc.phone || "",
       documentNumber: docResult.getValue(),
       passwordHash: doc.passwordHash,
       pointsBalance: pointsResult.getValue(),
@@ -36,7 +36,7 @@ export class CustomerMapper {
     return {
       name: customer.name,
       email: customer.email.value,
-      phone: customer.phone,
+      phone: customer.phone || "",
       documentNumber: customer.documentNumber.value,
       passwordHash: customer.passwordHash,
       role: "CUSTOMER",

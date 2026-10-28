@@ -3,7 +3,9 @@ import { RegisterCustomerUseCase } from "../../application/auth/RegisterCustomer
 import { AddPointsUseCase } from "../../application/customers/AddPointsUseCase";
 import { GetCustomerByIdUseCase } from "../../application/customers/GetCustomerByIdUseCase";
 import { ListCustomersUseCase } from "../../application/customers/ListCustomersUseCase";
+import { SetCustomerPointsUseCase } from "../../application/customers/SetCustomerPointsUseCase";
 import { UpdateCustomerUseCase } from "../../application/customers/UpdateCustomerUseCase";
+import { AuditLogService } from "../../infrastructure/services/AuditLogService";
 import { AuthenticatedRequest } from "../middlewares/AuthMiddleware";
 
 export class CustomerController {
@@ -12,7 +14,9 @@ export class CustomerController {
     private readonly getCustomerByIdUseCase: GetCustomerByIdUseCase,
     private readonly updateCustomerUseCase: UpdateCustomerUseCase,
     private readonly addPointsUseCase: AddPointsUseCase,
-    private readonly registerCustomerUseCase: RegisterCustomerUseCase
+    private readonly registerCustomerUseCase: RegisterCustomerUseCase,
+    private readonly setCustomerPointsUseCase: SetCustomerPointsUseCase,
+    private readonly auditLogService?: AuditLogService
   ) {}
 
   public search = async (req: AuthenticatedRequest, res: Response): Promise<void> => {
@@ -56,6 +60,23 @@ export class CustomerController {
       return;
     }
     const c = result.getValue();
+
+    if (this.auditLogService) {
+      const actorName = req.user?.name || req.user?.email || "Personal";
+      await this.auditLogService.log({
+        action: "CUSTOMER_CREATE",
+        category: "CUSTOMER",
+        actorId: req.user?.userId,
+        actorName,
+        actorRole: req.user?.staffRole || req.user?.role || "STAFF",
+        targetId: c.id,
+        targetName: c.name,
+        targetType: "CUSTOMER",
+        description: `El personal ${actorName} dio de alta al cliente ${c.name} (DNI: ${c.documentNumber.value}).`,
+        details: { email: c.email.value, phone: c.phone },
+      });
+    }
+
     res.status(201).json({
       success: true,
       data: {
@@ -104,6 +125,23 @@ export class CustomerController {
       return;
     }
     const c = result.getValue();
+
+    if (this.auditLogService) {
+      const actorName = req.user?.name || req.user?.email || "Personal";
+      const passResetText = req.body.password ? " y restableció su contraseña" : "";
+      await this.auditLogService.log({
+        action: "CUSTOMER_UPDATE",
+        category: "CUSTOMER",
+        actorId: req.user?.userId,
+        actorName,
+        actorRole: req.user?.staffRole || req.user?.role || "STAFF",
+        targetId: c.id,
+        targetName: c.name,
+        targetType: "CUSTOMER",
+        description: `El personal ${actorName} actualizó los datos${passResetText} del cliente ${c.name}.`,
+        details: { email: c.email.value, phone: c.phone, passwordReset: !!req.body.password },
+      });
+    }
     res.json({
       success: true,
       data: {
@@ -119,19 +157,55 @@ export class CustomerController {
   public addPoints = async (req: AuthenticatedRequest, res: Response): Promise<void> => {
     const staffId = req.user?.userId;
     if (!staffId) {
-      res.status(401).json({ success: false, error: "Staff authentication required." });
+      res.status(401).json({ success: false, error: "Autenticación de personal requerida." });
       return;
     }
     const result = await this.addPointsUseCase.execute({
       customerId: req.params.id,
       pointsToAdd: Number(req.body.points),
       staffId,
+      staffName: req.user?.name || req.user?.email || "Personal",
+      staffRole: req.user?.staffRole || req.user?.role || "STAFF",
       note: req.body.note,
     });
     if (result.isFailure) {
       res.status(400).json({ success: false, error: result.error });
       return;
     }
+    const c = result.getValue();
+    res.json({
+      success: true,
+      data: { id: c.id, name: c.name, pointsBalance: c.pointsBalance.value },
+    });
+  };
+
+  public setPoints = async (req: AuthenticatedRequest, res: Response): Promise<void> => {
+    const staffId = req.user?.userId;
+    if (!staffId) {
+      res.status(401).json({ success: false, error: "Autenticación de personal requerida." });
+      return;
+    }
+
+    const rawPoints = req.body.points !== undefined ? req.body.points : req.body.targetPoints;
+    if (rawPoints === undefined || rawPoints === null || isNaN(Number(rawPoints))) {
+      res.status(400).json({ success: false, error: "Los puntos deben ser un número válido." });
+      return;
+    }
+
+    const result = await this.setCustomerPointsUseCase.execute({
+      customerId: req.params.id,
+      targetPoints: Number(rawPoints),
+      staffId,
+      staffName: req.user?.name || req.user?.email || "Personal",
+      staffRole: req.user?.staffRole || req.user?.role || "STAFF",
+      reason: req.body.reason || req.body.note,
+    });
+
+    if (result.isFailure) {
+      res.status(400).json({ success: false, error: result.error });
+      return;
+    }
+
     const c = result.getValue();
     res.json({
       success: true,

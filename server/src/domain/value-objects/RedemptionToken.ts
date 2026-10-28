@@ -23,11 +23,11 @@ export class RedemptionToken {
 
   public static create(token: string): Result<RedemptionToken> {
     if (!token || typeof token !== "string") {
-      return Result.fail<RedemptionToken>("Redemption code is required.");
+      return Result.fail<RedemptionToken>("El código de canje es obligatorio.");
     }
     const cleanToken = token.trim().toUpperCase();
     if (!RedemptionToken.TOKEN_PATTERN.test(cleanToken)) {
-      return Result.fail<RedemptionToken>("Invalid redemption code format.");
+      return Result.fail<RedemptionToken>("El formato del código de canje no es válido (ej: HLT-ABC123).");
     }
     return Result.ok<RedemptionToken>(new RedemptionToken(cleanToken));
   }

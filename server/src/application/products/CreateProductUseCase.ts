@@ -14,10 +14,10 @@ export class CreateProductUseCase {
 
   public async execute(dto: CreateProductDTO): Promise<Result<Product>> {
     if (!dto.name || dto.name.trim().length === 0) {
-      return Result.fail<Product>("Product name is required.");
+      return Result.fail<Product>("El nombre del producto es obligatorio.");
     }
     if (!dto.imageUrl || dto.imageUrl.trim().length === 0) {
-      return Result.fail<Product>("Product image URL is required.");
+      return Result.fail<Product>("La imagen del producto es obligatoria.");
     }
 
     const pointsResult = Points.create(dto.pointsRequired);

@@ -11,7 +11,7 @@ export class DeleteProductUseCase {
   public async execute(productId: string): Promise<Result<void>> {
     const product = await this.productRepo.findById(productId);
     if (!product) {
-      return Result.fail<void>("Product not found.");
+      return Result.fail<void>("Producto no encontrado.");
     }
 
     if (this.imageStorageService && product.imageUrl) {

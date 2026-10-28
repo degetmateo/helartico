@@ -20,7 +20,7 @@ export class UpdateStaffUseCase {
   public async execute(dto: UpdateStaffDTO): Promise<Result<Staff>> {
     const staff = await this.staffRepo.findById(dto.staffId);
     if (!staff) {
-      return Result.fail<Staff>("Staff member not found.");
+      return Result.fail<Staff>("Miembro del personal no encontrado.");
     }
 
     let docNumber: DocumentNumber | undefined = staff.documentNumber;
@@ -30,7 +30,7 @@ export class UpdateStaffUseCase {
         if (docRes.isFailure) return Result.fail<Staff>(docRes.error);
         const existing = await this.staffRepo.findByDocumentNumber(docRes.getValue());
         if (existing && existing.id !== staff.id) {
-          return Result.fail<Staff>("Document number is already in use by another staff member.");
+          return Result.fail<Staff>("El número de documento ya está en uso por otro miembro del personal.");
         }
         docNumber = docRes.getValue();
       } else {
@@ -40,7 +40,7 @@ export class UpdateStaffUseCase {
 
     const updatedName = dto.name !== undefined ? dto.name.trim() : staff.name;
     if (updatedName.length < 2) {
-      return Result.fail<Staff>("Name must have at least 2 characters.");
+      return Result.fail<Staff>("El nombre debe tener al menos 2 caracteres.");
     }
 
     staff.updateProfile(
@@ -60,7 +60,7 @@ export class UpdateStaffUseCase {
 
     if (dto.password && dto.password.trim().length > 0) {
       if (dto.password.length < 6) {
-        return Result.fail<Staff>("Password must be at least 6 characters long.");
+        return Result.fail<Staff>("La contraseña debe tener al menos 6 caracteres.");
       }
       const newHash = await BcryptPasswordHasher.hash(dto.password);
       staff.changePassword(newHash);

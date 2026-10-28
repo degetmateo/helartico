@@ -11,12 +11,12 @@ export class DeleteStaffUseCase {
 
   public async execute(dto: DeleteStaffDTO): Promise<Result<void>> {
     if (dto.staffId === dto.requesterStaffId) {
-      return Result.fail<void>("You cannot delete your own administrator account.");
+      return Result.fail<void>("No puedes eliminar tu propia cuenta de administrador mientras estés en sesión.");
     }
 
     const staff = await this.staffRepo.findById(dto.staffId);
     if (!staff) {
-      return Result.fail<void>("Staff member not found.");
+      return Result.fail<void>("Miembro del personal no encontrado.");
     }
 
     await this.staffRepo.delete(dto.staffId);

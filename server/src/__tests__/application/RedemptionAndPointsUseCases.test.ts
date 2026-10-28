@@ -1,5 +1,6 @@
 import { beforeEach, describe, expect, it } from "vitest";
 import { AddPointsUseCase } from "../../application/customers/AddPointsUseCase";
+import { SetCustomerPointsUseCase } from "../../application/customers/SetCustomerPointsUseCase";
 import { RedeemProductUseCase } from "../../application/redemptions/RedeemProductUseCase";
 import { ValidateCodeUseCase } from "../../application/redemptions/ValidateCodeUseCase";
 import { Customer } from "../../domain/entities/Customer";
@@ -21,6 +22,7 @@ describe("Redemption and Points Use Cases", () => {
   let transactionRepo: InMemoryTransactionRepository;
 
   let addPointsUseCase: AddPointsUseCase;
+  let setCustomerPointsUseCase: SetCustomerPointsUseCase;
   let redeemProductUseCase: RedeemProductUseCase;
   let validateCodeUseCase: ValidateCodeUseCase;
 
@@ -34,6 +36,7 @@ describe("Redemption and Points Use Cases", () => {
     transactionRepo = new InMemoryTransactionRepository();
 
     addPointsUseCase = new AddPointsUseCase(customerRepo, transactionRepo);
+    setCustomerPointsUseCase = new SetCustomerPointsUseCase(customerRepo, transactionRepo);
     redeemProductUseCase = new RedeemProductUseCase(
       customerRepo,
       productRepo,
@@ -86,7 +89,7 @@ describe("Redemption and Points Use Cases", () => {
       productId: product.id!,
     });
     expect(res.isFailure).toBe(true);
-    expect(res.error).toContain("Insufficient points");
+    expect(res.error).toContain("Puntos insuficientes");
   });
 
   it("should execute full flow: earn points -> redeem code -> staff validates", async () => {
@@ -125,6 +128,67 @@ describe("Redemption and Points Use Cases", () => {
       staffId: "staff_cashier",
     });
     expect(replayRes.isFailure).toBe(true);
-    expect(replayRes.error).toContain("already been consumed");
+    expect(replayRes.error).toContain("ya fue utilizado");
+  });
+
+  describe("SetCustomerPointsUseCase (Staff Arbitrary Points Adjustment)", () => {
+    it("should allow staff to arbitrarily set customer points higher", async () => {
+      const result = await setCustomerPointsUseCase.execute({
+        customerId: customer.id!,
+        targetPoints: 200,
+        staffId: "staff_manager",
+        reason: "Corrección por error de carga en caja",
+      });
+
+      expect(result.isSuccess).toBe(true);
+      expect(result.getValue().pointsBalance.value).toBe(200);
+
+      expect(transactionRepo.transactions.length).toBe(1);
+      const tx = transactionRepo.transactions[0];
+      expect(tx.type).toBe("MANUAL_ADJUSTMENT");
+      expect(tx.amount).toBe(150); // 200 - 50 = +150
+      expect(tx.performedByStaffId).toBe("staff_manager");
+      expect(tx.note).toBe("Corrección por error de carga en caja");
+    });
+
+    it("should allow staff to arbitrarily set customer points lower or to zero", async () => {
+      const result = await setCustomerPointsUseCase.execute({
+        customerId: customer.id!,
+        targetPoints: 0,
+        staffId: "staff_manager",
+      });
+
+      expect(result.isSuccess).toBe(true);
+      expect(result.getValue().pointsBalance.value).toBe(0);
+
+      const tx = transactionRepo.transactions[0];
+      expect(tx.type).toBe("MANUAL_ADJUSTMENT");
+      expect(tx.amount).toBe(-50); // 0 - 50 = -50
+    });
+
+    it("should reject setting negative points", async () => {
+      const result = await setCustomerPointsUseCase.execute({
+        customerId: customer.id!,
+        targetPoints: -10,
+        staffId: "staff_manager",
+      });
+
+      expect(result.isFailure).toBe(true);
+      expect(result.error).toContain("Los puntos no pueden ser negativos");
+
+      const check = await customerRepo.findById(customer.id!);
+      expect(check?.pointsBalance.value).toBe(50);
+    });
+
+    it("should fail when customer is not found", async () => {
+      const result = await setCustomerPointsUseCase.execute({
+        customerId: "nonexistent_cust",
+        targetPoints: 100,
+        staffId: "staff_manager",
+      });
+
+      expect(result.isFailure).toBe(true);
+      expect(result.error).toBe("Cliente no encontrado o inactivo.");
+    });
   });
 });

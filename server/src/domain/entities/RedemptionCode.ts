@@ -59,11 +59,11 @@ export class RedemptionCode {
 
   public consume(staffId: string, currentDate: Date = new Date()): Result<void> {
     if (this._status === "CONSUMED") {
-      return Result.fail<void>("This redemption code has already been consumed.");
+      return Result.fail<void>("Este código de canje ya fue utilizado.");
     }
     if (this.isExpired(currentDate)) {
       this._status = "EXPIRED";
-      return Result.fail<void>("This redemption code has expired.");
+      return Result.fail<void>("Este código de canje ha expirado (los códigos tienen 30 minutos de validez).");
     }
     this._status = "CONSUMED";
     this._consumedAt = currentDate;

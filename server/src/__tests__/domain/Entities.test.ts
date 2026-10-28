@@ -32,6 +32,9 @@ describe("Domain Entities", () => {
     const failDeduct = customer.deductPoints(Points.create(200).getValue());
     expect(failDeduct.isFailure).toBe(true);
     expect(customer.pointsBalance.value).toBe(70);
+
+    customer.setPoints(Points.create(300).getValue());
+    expect(customer.pointsBalance.value).toBe(300);
   });
 
   it("RedemptionCode should expire after time limit and consume only once", () => {
@@ -56,7 +59,7 @@ describe("Domain Entities", () => {
     // Attempt second consume
     const doubleConsume = code.consume("staff_999");
     expect(doubleConsume.isFailure).toBe(true);
-    expect(doubleConsume.error).toContain("already been consumed");
+    expect(doubleConsume.error).toContain("ya fue utilizado");
   });
 
   it("RedemptionCode should reject consumption if expired", () => {
@@ -73,7 +76,7 @@ describe("Domain Entities", () => {
     expect(code.isExpired()).toBe(true);
     const res = code.consume("staff_1");
     expect(res.isFailure).toBe(true);
-    expect(res.error).toContain("expired");
+    expect(res.error).toContain("ha expirado");
   });
 
   it("Product should update points and handle active state", () => {

@@ -49,6 +49,7 @@ export class AuthenticateUserUseCase {
           role: "STAFF",
           staffRole: staff.role,
           email: staff.email.value,
+          name: staff.name,
         });
         return Result.ok<AuthResponseDTO>({
           token,
@@ -74,6 +75,7 @@ export class AuthenticateUserUseCase {
           userId: customer.id!,
           role: "CUSTOMER",
           email: customer.email.value,
+          name: customer.name,
         });
         return Result.ok<AuthResponseDTO>({
           token,
@@ -90,6 +92,6 @@ export class AuthenticateUserUseCase {
       }
     }
 
-    return Result.fail<AuthResponseDTO>("Invalid email or password.");
+    return Result.fail<AuthResponseDTO>("Correo electrónico o contraseña incorrectos.");
   }
 }

@@ -38,3 +38,27 @@ export interface AuthState {
   token: string | null;
   isLoading: boolean;
 }
+
+export type AuditCategory =
+  | "POINTS"
+  | "REDEMPTION"
+  | "PRODUCT"
+  | "CUSTOMER"
+  | "STAFF"
+  | "AUTH";
+
+export interface AuditLogItem {
+  id: string;
+  action: string;
+  category: AuditCategory;
+  actorId?: string;
+  actorName: string;
+  actorEmail?: string;
+  actorRole: string;
+  targetId?: string;
+  targetName?: string;
+  targetType?: string;
+  description: string;
+  details?: Record<string, any>;
+  createdAt: string;
+}

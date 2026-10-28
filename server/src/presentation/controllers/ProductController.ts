@@ -3,6 +3,7 @@ import { CreateProductUseCase } from "../../application/products/CreateProductUs
 import { DeleteProductUseCase } from "../../application/products/DeleteProductUseCase";
 import { ListProductsUseCase } from "../../application/products/ListProductsUseCase";
 import { UpdateProductUseCase } from "../../application/products/UpdateProductUseCase";
+import { AuditLogService } from "../../infrastructure/services/AuditLogService";
 import { AuthenticatedRequest } from "../middlewares/AuthMiddleware";
 
 export class ProductController {
@@ -10,7 +11,8 @@ export class ProductController {
     private readonly listProductsUseCase: ListProductsUseCase,
     private readonly createProductUseCase: CreateProductUseCase,
     private readonly updateProductUseCase: UpdateProductUseCase,
-    private readonly deleteProductUseCase: DeleteProductUseCase
+    private readonly deleteProductUseCase: DeleteProductUseCase,
+    private readonly auditLogService?: AuditLogService
   ) {}
 
   public listActive = async (req: AuthenticatedRequest, res: Response): Promise<void> => {
@@ -83,6 +85,23 @@ export class ProductController {
       return;
     }
     const p = result.getValue();
+
+    if (this.auditLogService) {
+      const actorName = req.user?.name || req.user?.email || "Personal";
+      await this.auditLogService.log({
+        action: "PRODUCT_CREATE",
+        category: "PRODUCT",
+        actorId: req.user?.userId,
+        actorName,
+        actorRole: req.user?.staffRole || req.user?.role || "STAFF",
+        targetId: p.id,
+        targetName: p.name,
+        targetType: "PRODUCT",
+        description: `El personal ${actorName} creó el producto "${p.name}" (${p.pointsRequired.value} pts).`,
+        details: { pointsRequired: p.pointsRequired.value, imageUrl: p.imageUrl },
+      });
+    }
+
     res.status(201).json({
       success: true,
       data: { id: p.id, name: p.name, imageUrl: p.imageUrl, pointsRequired: p.pointsRequired.value },
@@ -102,6 +121,23 @@ export class ProductController {
       return;
     }
     const p = result.getValue();
+
+    if (this.auditLogService) {
+      const actorName = req.user?.name || req.user?.email || "Personal";
+      await this.auditLogService.log({
+        action: "PRODUCT_UPDATE",
+        category: "PRODUCT",
+        actorId: req.user?.userId,
+        actorName,
+        actorRole: req.user?.staffRole || req.user?.role || "STAFF",
+        targetId: p.id,
+        targetName: p.name,
+        targetType: "PRODUCT",
+        description: `El personal ${actorName} modificó los datos del producto "${p.name}".`,
+        details: { pointsRequired: p.pointsRequired.value, isActive: p.isActive },
+      });
+    }
+
     res.json({
       success: true,
       data: {
@@ -120,6 +156,21 @@ export class ProductController {
       res.status(404).json({ success: false, error: result.error });
       return;
     }
-    res.json({ success: true, message: "Product deleted successfully." });
+
+    if (this.auditLogService) {
+      const actorName = req.user?.name || req.user?.email || "Personal";
+      await this.auditLogService.log({
+        action: "PRODUCT_DELETE",
+        category: "PRODUCT",
+        actorId: req.user?.userId,
+        actorName,
+        actorRole: req.user?.staffRole || req.user?.role || "STAFF",
+        targetId: req.params.id,
+        targetType: "PRODUCT",
+        description: `El personal ${actorName} eliminó un producto del catálogo (ID: ${req.params.id}).`,
+      });
+    }
+
+    res.json({ success: true, message: "Producto eliminado con éxito." });
   };
 }

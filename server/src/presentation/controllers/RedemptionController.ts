@@ -14,7 +14,7 @@ export class RedemptionController {
   public redeem = async (req: AuthenticatedRequest, res: Response): Promise<void> => {
     const customerId = req.user?.userId;
     if (!customerId) {
-      res.status(401).json({ success: false, error: "Authentication required." });
+      res.status(401).json({ success: false, error: "Autenticación requerida." });
       return;
     }
 
@@ -31,12 +31,16 @@ export class RedemptionController {
   public validate = async (req: AuthenticatedRequest, res: Response): Promise<void> => {
     const staffId = req.user?.userId;
     if (!staffId) {
-      res.status(401).json({ success: false, error: "Staff authentication required." });
+      res.status(401).json({ success: false, error: "Autenticación de personal requerida." });
       return;
     }
 
     const { code } = req.body;
-    const result = await this.validateCodeUseCase.execute({ code, staffId });
+    const result = await this.validateCodeUseCase.execute({
+      code,
+      staffId,
+      staffName: req.user?.name || req.user?.email || "Personal en mostrador",
+    });
     if (result.isFailure) {
       res.status(400).json({ success: false, error: result.error });
       return;
@@ -51,7 +55,7 @@ export class RedemptionController {
   ): Promise<void> => {
     const customerId = req.user?.userId;
     if (!customerId) {
-      res.status(401).json({ success: false, error: "Authentication required." });
+      res.status(401).json({ success: false, error: "Autenticación requerida." });
       return;
     }
 

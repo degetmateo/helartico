@@ -61,7 +61,7 @@ export class CloudinaryImageStorageService implements IImageStorageService {
         },
         (error, result) => {
           if (error || !result) {
-            reject(new Error(error?.message || "Failed to upload image to Cloudinary."));
+            reject(new Error(error?.message || "No se pudo subir la imagen a Cloudinary."));
             return;
           }
           resolve(result.secure_url);

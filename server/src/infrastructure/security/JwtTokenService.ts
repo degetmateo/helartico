@@ -7,6 +7,7 @@ export interface TokenPayload {
   role: "CUSTOMER" | "STAFF";
   staffRole?: StaffRole;
   email: string;
+  name?: string;
 }
 
 export class JwtTokenService {

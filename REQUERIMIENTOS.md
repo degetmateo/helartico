@@ -5,7 +5,7 @@
 
 ## 1. Visión General del Proyecto
 
-**Helartico** es una heladería y cafetería artesanal. El objetivo de este proyecto es implementar una plataforma web progresiva (**PWA - Progressive Web App**) orientada al **programa de fidelidad y recompensas** para sus clientes, acompañada de un panel de gestión ágil para el personal (**Staff / Administradores**).
+**Helartico** es una heladería y cafetería. El objetivo de este proyecto es implementar una plataforma web progresiva (**PWA - Progressive Web App**) orientada al **programa de fidelidad y recompensas** para sus clientes, acompañada de un panel de gestión ágil para el personal (**Staff / Administradores**).
 
 ### 1.1 Objetivo del Negocio
 - Fomentar la recurrencia de compra presencial premiando a los clientes con puntos por cada consumo.
@@ -20,7 +20,7 @@
 
 ### 2.1 Clientes (Customer)
 - **Registro y Autenticación**:
-  - Auto-registro con: Nombre completo, correo electrónico, número de teléfono, número de documento de identidad (DNI/cédula) y contraseña.
+  - Auto-registro con: Nombre completo, correo electrónico, número de documento de identidad (DNI/cédula) y contraseña (**el número de teléfono es opcional**).
   - Inicio de sesión con correo electrónico y contraseña.
   - Al ingresar, visualización de un aviso/modal informativo para la instalación de la PWA (según SO: Android / iOS).
 - **Gestión de Puntos y Catálogo**:
@@ -58,8 +58,8 @@ El personal del comercio se divide en dos niveles jerárquicos:
   - Validación del estado: si es válido y está dentro de los 30 minutos, se marca como consumido, se asocia al personal que lo atendió y se confirma la entrega del producto.
 
 - **Gestión de Clientes (CRUD y Puntos)**:
-  - Registro de clientes asistido en mostrador.
-  - Búsqueda de clientes por documento o correo electrónico.
+  - Registro de clientes asistido en mostrador (el número de teléfono es opcional).
+  - Búsqueda de clientes por documento, correo electrónico o teléfono.
   - Modificación de datos y reseteo manual de claves de acceso.
   - Eliminación/desactivación de clientes.
   - Suma manual de puntos por compras presenciales con registro de nota/comprobante.
@@ -600,3 +600,146 @@ El sistema implementa una matriz de control de acceso basada en roles (RBAC) jer
   - Llamada a `deleteImage` con la URL previa cuando la imagen es reemplazada.
   - Eliminación completa del producto en el repositorio y destrucción de su imagen en Cloudinary.
   - Manejo de errores controlados para identificadores inexistentes.
+
+---
+
+## 15. Mensajes de Error y Retroalimentación en Español
+
+Para brindar una experiencia intuitiva, accesible y transparente tanto a los clientes como al personal del comercio, todos los mensajes de error, advertencia y retroalimentación del sistema se expresan en **español claro y comprensible**.
+
+### 15.1 Capas Afectadas
+1. **Objetos de Valor del Dominio (`Value Objects`)**:
+   - `Email`: *"El correo electrónico es obligatorio."*, *"El formato del correo electrónico no es válido."*
+   - `Points`: *"Los puntos deben ser un número válido."*, *"Los puntos deben ser un número entero."*, *"Los puntos no pueden ser negativos."*, *"Saldo de puntos insuficiente."*
+   - `DocumentNumber`: *"El número de documento es obligatorio."*, *"El número de documento debe tener entre 5 y 20 caracteres."*
+   - `RedemptionToken`: *"El código de canje es obligatorio."*, *"El formato del código de canje no es válido (ej: HLT-ABC123)."*
+2. **Entidades del Dominio (`Entities`)**:
+   - `Product`: *"El nombre del producto no puede estar vacío."*
+   - `RedemptionCode`: *"Este código de canje ya fue utilizado."*, *"Este código de canje ha expirado (los códigos tienen 30 minutos de validez)."*
+3. **Casos de Uso de Aplicación (`Use Cases`)**:
+   - Autenticación: *"Correo electrónico o contraseña incorrectos."*
+   - Registro de clientes y staff: *"El nombre debe tener al menos 2 caracteres."*, *"La contraseña debe tener al menos 6 caracteres."*, *"Ya existe un cliente/miembro registrado con este correo electrónico."*, *"Ya existe un cliente/miembro registrado con este número de documento."*
+   - Canjes y validaciones: *"Cliente no encontrado o inactivo."*, *"El producto seleccionado no está disponible para canje."*, *"Puntos insuficientes para este canje. Necesarios: X, Disponibles: Y"*, *"Código de canje no encontrado."*
+   - Jerarquía de Staff: *"No puedes eliminar tu propia cuenta de administrador mientras estés en sesión."*, *"Miembro del personal no encontrado."*
+   - Gestión de productos: *"Producto no encontrado."*, *"El nombre del producto es obligatorio."*, *"La imagen del producto es obligatoria."*
+4. **Middlewares y Controladores de Presentación**:
+   - Token y sesión: *"Sesión no válida o token de acceso ausente."*, *"La sesión ha expirado o el token no es válido."*
+   - Permisos y roles: *"Acceso denegado: No tienes permisos para acceder a este recurso."*, *"Acceso denegado: Se requieren permisos de Administrador."*
+   - Control de fallos generales: *"Ocurrió un error interno en el servidor. Por favor, intenta de nuevo más tarde."*
+5. **Cliente Web / PWA**:
+   - Manejo centralizado en `ApiClient` con mensajes predeterminados en español (*"Error en la solicitud."*, *"Error al subir la imagen."*).
+   - Retroalimentación en modales, alertas y estados de error directos en la interfaz.
+
+---
+
+## 16. Ajuste Manual y Arbitrario del Saldo de Puntos (Staff)
+
+Para gestionar situaciones excepcionales —tales como equivocaciones al tipear puntos en compras presenciales, devoluciones o compensaciones autorizadas— los miembros del personal (`STAFF`) disponen de la capacidad de **establecer arbitrariamente el saldo total de puntos** de un cliente a un número exacto (mayor o igual a cero).
+
+### 16.1 Salvaguardas y Confirmación Obligatoria
+Al ser una operación crítica que reemplaza de forma directa el balance acumulado:
+- **Alerta Visual**: La interfaz despliega advertencias claras en tonos de precaución destacando que se trata de una acción delicada.
+- **Cálculo Dinámico de Diferencia**: Al tipear el nuevo saldo, la interfaz calcula y previsualiza en tiempo real la diferencia aritmética respecto al saldo anterior (ej. de 50 a 80 pts muestra `+30 pts`, de 50 a 10 pts muestra `-40 pts`).
+- **Paso Obligatorio de Confirmación**: Antes de enviar la solicitud al servidor, se activa un diálogo de confirmación explícito que detalla:
+  - Nombre y DNI del cliente.
+  - Saldo anterior tachado y nuevo saldo en tipografía destacada.
+  - Botón de confirmación reforzado (*"Sí, Confirmar Ajuste"*) y opción de volver atrás.
+
+### 16.2 Arquitectura y Auditoría en Base de Datos
+- **Entidad `Customer`**: Método `setPoints(newPoints: Points): void` que actualiza el saldo y fecha de modificación.
+- **Caso de Uso `SetCustomerPointsUseCase`**:
+  - Valida que los puntos sean un entero no negativo (`Points.create`).
+  - Obtiene el cliente activo y calcula la variación `diff = targetPoints - previousPoints`.
+  - Registra una transacción inmutable en `points_transactions` con:
+    - `type`: `"MANUAL_ADJUSTMENT"`
+    - `amount`: `diff` (positivo o negativo)
+    - `performedByStaffId`: identificador del usuario staff autenticado en sesión
+    - `note`: motivo ingresado por el empleado o texto explicativo automático (`Ajuste manual de saldo de puntos (de X a Y pts)`).
+- **Endpoint**: `PUT /api/customers/:id/points` protegido con `AuthMiddleware` y `RoleMiddleware.requireRole("STAFF")`.
+
+---
+
+## 17. Sistema Integral de Registros y Auditoría (Audit Logs)
+
+Para garantizar la máxima transparencia, trazabilidad y seguridad operativa en el negocio, el sistema implementa una infraestructura transversal de **registros de auditoría inmutables**. Cada operación efectuada en la plataforma —ya sea realizada por un Administrador, un Empleado de mostrador o un Cliente— queda registrada con fecha, hora, autor, destinatario, descripción humana en español y detalles técnicos.
+
+### 17.1 Modelo de Datos en MongoDB (`audit_logs`)
+Colección dedicada optimizada para consultas de alto rendimiento y orden cronológico inverso:
+```json
+{
+  "_id": "ObjectId",
+  "action": "POINTS_ADD",
+  "category": "POINTS", // "POINTS" | "REDEMPTION" | "PRODUCT" | "CUSTOMER" | "STAFF" | "AUTH"
+  "actorId": "ObjectId(User)",
+  "actorName": "Mariana Lopez",
+  "actorEmail": "mariana@helartico.com",
+  "actorRole": "STAFF", // "ADMIN" | "STAFF" | "CUSTOMER"
+  "targetId": "ObjectId(Customer)",
+  "targetName": "Carlos Gomez",
+  "targetType": "CUSTOMER",
+  "description": "El personal Mariana Lopez acreditó 40 puntos al cliente Carlos Gomez.",
+  "details": {
+    "pointsAdded": 40,
+    "newBalance": 140,
+    "note": "Compra presencial Helado 1kg"
+  },
+  "createdAt": "2026-10-27T21:00:00.000Z"
+}
+```
+
+*Estrategia de Índices*:
+- `{ createdAt: -1 }`: Optimizado para paginación y orden cronológico predeterminado.
+- `{ category: 1, createdAt: -1 }`: Optimizado para filtrado por categoría temática.
+- `{ action: 1 }`: Optimizado para filtrado por tipo específico de operación.
+- `{ actorId: 1 }` y `{ targetId: 1 }`: Optimizado para búsquedas por usuario o entidad destino.
+
+### 17.2 Catálogo de Operaciones Auditadas
+El sistema registra todas las acciones existentes y está diseñado de manera abierta y desacoplada para admitir futuras operaciones sin alterar la base de datos:
+
+| Categoría | Acción (`action`) | Actor | Descripción Típica |
+| :--- | :--- | :--- | :--- |
+| **POINTS** | `POINTS_ADD` | Staff / Admin | Acreditación de puntos por compra presencial |
+| **POINTS** | `POINTS_SET` | Staff / Admin | Ajuste manual y arbitrario del saldo total de puntos |
+| **REDEMPTION** | `REDEMPTION_CREATE` | Cliente | Generación de código temporal para canjear un producto |
+| **REDEMPTION** | `REDEMPTION_VALIDATE` | Staff / Admin | Validación, consumo de código y entrega física del producto |
+| **PRODUCT** | `PRODUCT_CREATE` | Staff / Admin | Alta de un nuevo producto en el catálogo |
+| **PRODUCT** | `PRODUCT_UPDATE` | Staff / Admin | Modificación de nombre, puntos o imagen de un producto |
+| **PRODUCT** | `PRODUCT_DELETE` | Staff / Admin | Eliminación de un producto y limpieza de imagen en Cloudinary |
+| **CUSTOMER** | `CUSTOMER_REGISTER` | Cliente | Auto-registro de nuevo cliente desde la PWA |
+| **CUSTOMER** | `CUSTOMER_CREATE` | Staff / Admin | Alta de nuevo cliente realizada por personal en mostrador |
+| **CUSTOMER** | `CUSTOMER_UPDATE` | Staff / Admin | Actualización de datos de perfil de un cliente |
+| **STAFF** | `STAFF_CREATE` | Admin | Creación de una nueva cuenta de empleado o administrador |
+| **STAFF** | `STAFF_UPDATE` | Admin | Edición de rol, nombre, teléfono o contraseña de un miembro del staff |
+| **STAFF** | `STAFF_DELETE` | Admin | Baja definitiva de una cuenta del personal |
+| **AUTH** | `AUTH_LOGIN` | Cualquiera | Inicio de sesión exitoso en la plataforma |
+
+### 17.3 Arquitectura y Desacoplamiento (`AuditLogService`)
+- **Tolerancia a Fallos**: El servicio de auditoría (`AuditLogService`) ejecuta los registros de forma segura dentro de bloques controlados. Un fallo eventual en la persistencia del log nunca interrumpe ni revierte la transacción principal del negocio (ej. el canje o la venta).
+- **Inyección de Dependencias**: Los casos de uso de la aplicación (`AddPointsUseCase`, `SetCustomerPointsUseCase`, `RedeemProductUseCase`, `ValidateCodeUseCase`, etc.) reciben `AuditLogService` como parámetro opcional, preservando la compatibilidad retroactiva y facilitando las pruebas unitarias con repositorios en memoria.
+- **Identidad en Tokens**: Se enriqueció el payload de autenticación JWT (`TokenPayload`) para incluir el nombre del usuario (`name`), garantizando que cada petición autenticada tenga acceso inmediato al nombre del operador sin requerir consultas adicionales a la base de datos.
+
+### 17.4 Seguridad y Control de Acceso (RBAC)
+- **Endpoint Exclusivo para Administradores**:
+  - `GET /api/logs`: Protegido con `AuthMiddleware.handle` y `RoleMiddleware.requireAdmin()`.
+  - Los empleados con rol `EMPLOYEE` o clientes obtienen un error `403 Forbidden` (*"Acceso denegado: Se requieren permisos de Administrador."*).
+- **Parámetros de Filtrado**:
+  - `category`: Filtra por categoría (`POINTS`, `REDEMPTION`, `PRODUCT`, `CUSTOMER`, `STAFF`, `AUTH`).
+  - `action`: Filtra por código de acción exacta.
+  - `role`: Filtra por rol del operador (`ADMIN`, `STAFF`, `CUSTOMER`).
+  - `search`: Búsqueda textual parcial (case-insensitive) sobre el nombre del actor, correo electrónico, destinatario y descripción del evento.
+  - `page` y `limit`: Paginación con metadatos estándar (`total`, `totalPages`, `hasMore`).
+
+### 17.5 Interfaz de Usuario para Administradores (Staff Dashboard)
+En el panel del personal (`StaffAdminDashboard`), los usuarios con rol `ADMIN` acceden a una nueva pestaña: **"Registros del Sistema"** (`AUDIT_LOGS`):
+1. **Filtros Interactivos**:
+   - Selector visual de categorías en píldoras con iconos temáticos.
+   - Menú desplegable para filtrar por acción específica.
+   - Barra de búsqueda con debounce (350 ms) para búsqueda instantánea sin sobrecargar el servidor.
+   - Botón de refresco manual y botón para restablecer filtros con un clic.
+2. **Tarjetas de Actividad**:
+   - Identificación cromática según categoría y rol (`👑 Admin`, `💼 Empleado`, `👤 Cliente`).
+   - Fecha y hora formateadas en hora local (`DD/MM/AAAA, HH:mm:ss`).
+   - Descripción redactada en lenguaje natural y legible.
+   - Visor desplegable de detalles técnicos estructurados en formato JSON (diferencias de puntos, motivos, IDs vinculados).
+3. **Paginación Infinita**:
+   - Integración con el hook `useInfiniteScroll` mediante `IntersectionObserver` para una navegación continua y fluida sin saltos de página.

@@ -7,7 +7,7 @@ export interface CustomerProps {
   id?: string;
   name: string;
   email: Email;
-  phone: string;
+  phone?: string;
   documentNumber: DocumentNumber;
   passwordHash: string;
   pointsBalance: Points;
@@ -32,7 +32,7 @@ export class Customer {
     this._id = props.id;
     this._name = props.name.trim();
     this._email = props.email;
-    this._phone = props.phone.trim();
+    this._phone = (props.phone ?? "").trim();
     this._documentNumber = props.documentNumber;
     this._passwordHash = props.passwordHash;
     this._pointsBalance = props.pointsBalance;
@@ -67,14 +67,21 @@ export class Customer {
     return Result.ok<void>();
   }
 
+  public setPoints(newPoints: Points): void {
+    this._pointsBalance = newPoints;
+    this._updatedAt = new Date();
+  }
+
   public updateProfile(
     name: string,
-    phone: string,
+    phone?: string,
     email?: Email,
     documentNumber?: DocumentNumber
   ): void {
     this._name = name.trim();
-    this._phone = phone.trim();
+    if (phone !== undefined) {
+      this._phone = phone.trim();
+    }
     if (email) (this as any)._email = email;
     if (documentNumber) (this as any)._documentNumber = documentNumber;
     this._updatedAt = new Date();

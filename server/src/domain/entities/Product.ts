@@ -40,7 +40,7 @@ export class Product {
 
   public update(name: string, imageUrl: string, points: Points): Result<void> {
     if (!name || name.trim().length === 0) {
-      return Result.fail<void>("Product name cannot be empty.");
+      return Result.fail<void>("El nombre del producto no puede estar vacío.");
     }
     this._name = name.trim();
     this._imageUrl = imageUrl.trim();

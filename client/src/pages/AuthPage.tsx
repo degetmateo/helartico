@@ -70,7 +70,7 @@ export const AuthPage: React.FC = () => {
           {isRegister && (
             <>
               <input type="text" placeholder="Nombre y Apellido" value={name} onChange={(e) => setName(e.target.value)} required style={{ padding: 10, borderRadius: 8, border: "1px solid var(--color-border)" }} />
-              <input type="tel" placeholder="Número de teléfono" value={phone} onChange={(e) => setPhone(e.target.value)} required style={{ padding: 10, borderRadius: 8, border: "1px solid var(--color-border)" }} />
+              <input type="tel" placeholder="Número de teléfono (Opcional)" value={phone} onChange={(e) => setPhone(e.target.value)} style={{ padding: 10, borderRadius: 8, border: "1px solid var(--color-border)" }} />
               <input type="text" placeholder="Número de documento / DNI" value={documentNumber} onChange={(e) => setDocumentNumber(e.target.value)} required style={{ padding: 10, borderRadius: 8, border: "1px solid var(--color-border)" }} />
             </>
           )}

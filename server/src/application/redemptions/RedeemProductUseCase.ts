@@ -7,6 +7,7 @@ import { IProductRepository } from "../../domain/repositories/IProductRepository
 import { IRedemptionCodeRepository } from "../../domain/repositories/IRedemptionCodeRepository";
 import { ITransactionRepository } from "../../domain/repositories/ITransactionRepository";
 import { RedemptionToken } from "../../domain/value-objects/RedemptionToken";
+import { AuditLogService } from "../../infrastructure/services/AuditLogService";
 
 export interface RedeemProductDTO {
   customerId: string;
@@ -26,23 +27,24 @@ export class RedeemProductUseCase {
     private readonly customerRepo: ICustomerRepository,
     private readonly productRepo: IProductRepository,
     private readonly redemptionRepo: IRedemptionCodeRepository,
-    private readonly transactionRepo: ITransactionRepository
+    private readonly transactionRepo: ITransactionRepository,
+    private readonly auditLogService?: AuditLogService
   ) {}
 
   public async execute(dto: RedeemProductDTO): Promise<Result<RedemptionResultDTO>> {
     const customer = await this.customerRepo.findById(dto.customerId);
     if (!customer || !customer.isActive) {
-      return Result.fail<RedemptionResultDTO>("Customer not found or inactive.");
+      return Result.fail<RedemptionResultDTO>("Cliente no encontrado o inactivo.");
     }
 
     const product = await this.productRepo.findById(dto.productId);
     if (!product || !product.isActive) {
-      return Result.fail<RedemptionResultDTO>("Product not available for redemption.");
+      return Result.fail<RedemptionResultDTO>("El producto seleccionado no está disponible para canje.");
     }
 
     if (!customer.pointsBalance.hasEnough(product.pointsRequired)) {
       return Result.fail<RedemptionResultDTO>(
-        `Insufficient points balance. Needed: ${product.pointsRequired.value}, Available: ${customer.pointsBalance.value}`
+        `Puntos insuficientes para este canje. Necesarios: ${product.pointsRequired.value}, Disponibles: ${customer.pointsBalance.value}`
       );
     }
 
@@ -71,10 +73,30 @@ export class RedeemProductUseCase {
       customerId: customer.id!,
       amount: -product.pointsRequired.value,
       type: "REDEMPTION",
-      note: `Redeemed product: ${product.name}`,
+      note: `Canje de producto: ${product.name}`,
       redemptionCodeId: savedCode.id,
     });
     await this.transactionRepo.save(transaction);
+
+    if (this.auditLogService) {
+      await this.auditLogService.log({
+        action: "REDEMPTION_CREATE",
+        category: "REDEMPTION",
+        actorId: customer.id,
+        actorName: customer.name,
+        actorEmail: customer.email.value,
+        actorRole: "CUSTOMER",
+        targetId: product.id,
+        targetName: product.name,
+        targetType: "PRODUCT",
+        description: `El cliente ${customer.name} canjeó el producto "${product.name}" por ${product.pointsRequired.value} puntos (Código: ${savedCode.code.value}).`,
+        details: {
+          code: savedCode.code.value,
+          pointsSpent: product.pointsRequired.value,
+          expiresAt: savedCode.expiresAt,
+        },
+      });
+    }
 
     return Result.ok<RedemptionResultDTO>({
       code: savedCode.code.value,

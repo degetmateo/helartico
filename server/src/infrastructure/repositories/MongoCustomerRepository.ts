@@ -51,7 +51,12 @@ export class MongoCustomerRepository implements ICustomerRepository {
     }
     if (criteria.searchTerm) {
       const regex = new RegExp(criteria.searchTerm.trim(), "i");
-      query.$or = [{ name: regex }, { email: regex }, { documentNumber: regex }];
+      query.$or = [
+        { name: regex },
+        { email: regex },
+        { documentNumber: regex },
+        { phone: regex },
+      ];
     }
 
     const { page, limit, skip } = PaginationHelper.normalize(

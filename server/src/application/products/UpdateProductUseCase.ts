@@ -26,7 +26,7 @@ export class UpdateProductUseCase {
 
     const product = await this.productRepo.findById(dto.productId);
     if (!product) {
-      return Result.fail<Product>("Product not found.");
+      return Result.fail<Product>("Producto no encontrado.");
     }
 
     const oldImageUrl = product.imageUrl;

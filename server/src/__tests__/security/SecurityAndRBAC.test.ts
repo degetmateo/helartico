@@ -56,7 +56,7 @@ describe("Security & RBAC Enforcement", () => {
       const res = await request(app).get("/api/customer-only");
       expect(res.status).toBe(401);
       expect(res.body.success).toBe(false);
-      expect(res.body.error).toContain("Access token missing");
+      expect(res.body.error).toContain("token de acceso ausente");
     });
 
     it("should reject malformed Authorization header", async () => {
@@ -74,7 +74,7 @@ describe("Security & RBAC Enforcement", () => {
         .set("Authorization", `Bearer ${tamperedToken}`);
       expect(res.status).toBe(401);
       expect(res.body.success).toBe(false);
-      expect(res.body.error).toContain("Expired or invalid");
+      expect(res.body.error).toContain("expirado o el token no es válido");
     });
   });
 
@@ -93,7 +93,7 @@ describe("Security & RBAC Enforcement", () => {
         .set("Authorization", `Bearer ${customerToken}`);
       expect(getRes.status).toBe(403);
       expect(getRes.body.success).toBe(false);
-      expect(getRes.body.error).toContain("Forbidden");
+      expect(getRes.body.error).toContain("Acceso denegado");
 
       const postRes = await request(app)
         .post("/api/staff/validate")

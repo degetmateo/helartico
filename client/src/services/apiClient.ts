@@ -37,7 +37,7 @@ export class ApiClient {
 
     const data = await response.json();
     if (!response.ok || data.success === false) {
-      throw new Error(data.error || "Request failed");
+      throw new Error(data.error || "Error en la solicitud.");
     }
 
     return data.data !== undefined ? data.data : data;
@@ -64,7 +64,7 @@ export class ApiClient {
 
     const data = await response.json();
     if (!response.ok || data.success === false) {
-      throw new Error(data.error || "Request failed");
+      throw new Error(data.error || "Error en la solicitud.");
     }
 
     const items: T[] = Array.isArray(data.data) ? data.data : [];
@@ -98,7 +98,7 @@ export class ApiClient {
 
     const data = await response.json();
     if (!response.ok || data.success === false) {
-      throw new Error(data.error || "Failed to upload image");
+      throw new Error(data.error || "Error al subir la imagen.");
     }
 
     return data.data.url;

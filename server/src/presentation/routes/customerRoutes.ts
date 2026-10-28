@@ -15,6 +15,7 @@ export function createCustomerRouter(controller: CustomerController): Router {
   router.get("/:id", controller.getById);
   router.put("/:id", controller.update);
   router.post("/:id/points", controller.addPoints);
+  router.put("/:id/points", controller.setPoints);
 
   return router;
 }

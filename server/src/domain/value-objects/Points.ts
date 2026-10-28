@@ -13,13 +13,13 @@ export class Points {
 
   public static create(points: number): Result<Points> {
     if (typeof points !== "number" || isNaN(points)) {
-      return Result.fail<Points>("Points must be a valid number.");
+      return Result.fail<Points>("Los puntos deben ser un número válido.");
     }
     if (!Number.isInteger(points)) {
-      return Result.fail<Points>("Points must be an integer.");
+      return Result.fail<Points>("Los puntos deben ser un número entero.");
     }
     if (points < 0) {
-      return Result.fail<Points>("Points cannot be negative.");
+      return Result.fail<Points>("Los puntos no pueden ser negativos.");
     }
     return Result.ok<Points>(new Points(points));
   }
@@ -34,7 +34,7 @@ export class Points {
 
   public subtract(deduction: Points): Result<Points> {
     if (this._value < deduction.value) {
-      return Result.fail<Points>("Insufficient points balance.");
+      return Result.fail<Points>("Saldo de puntos insuficiente.");
     }
     return Result.ok<Points>(new Points(this._value - deduction.value));
   }
