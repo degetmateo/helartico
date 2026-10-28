@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Smartphone } from "lucide-react";
+import { PasswordInput } from "../components/common/PasswordInput";
 import { PwaPromptModal } from "../components/common/PwaPromptModal";
 import { useAuth } from "../context/AuthContext";
 
@@ -28,7 +29,7 @@ export const AuthPage: React.FC = () => {
         await login(email, password);
       }
     } catch (err: any) {
-      setError(err.message || "Error al procesar solicitud");
+      setError(err.message || "Error al procesar la solicitud");
     } finally {
       setLoading(false);
     }
@@ -37,9 +38,15 @@ export const AuthPage: React.FC = () => {
   return (
     <div className="app-container" style={{ justifyContent: "center", padding: 24 }}>
       <div style={{ textAlign: "center", marginBottom: 24 }}>
-        <img src="/logo.png" alt="Helartico" style={{ width: 88, height: 88, borderRadius: "50%", marginBottom: 10, border: "2px solid var(--color-border)" }} />
+        <img
+          src="/logo.png"
+          alt="Helartico"
+          style={{ width: 88, height: 88, borderRadius: "50%", marginBottom: 10, border: "2px solid var(--color-border)" }}
+        />
         <h1 style={{ fontSize: "1.6rem", color: "var(--color-primary)" }}>Helartico</h1>
-        <p style={{ fontSize: "0.88rem", color: "var(--color-accent)", fontWeight: 600 }}>Helados & Café • Club de Fidelidad</p>
+        <p style={{ fontSize: "0.88rem", color: "var(--color-accent)", fontWeight: 600 }}>
+          Helados & Café • Sumá y Canjeá Puntos
+        </p>
       </div>
 
       <div style={{ background: "#fff", padding: 22, borderRadius: "var(--radius-lg)", boxShadow: "var(--shadow-md)", border: "1px solid var(--color-border)" }}>
@@ -49,14 +56,14 @@ export const AuthPage: React.FC = () => {
             onClick={() => { setIsRegister(false); setError(null); }}
             style={{ flex: 1, paddingBottom: 10, fontWeight: 700, fontSize: "0.95rem", color: !isRegister ? "var(--color-primary)" : "var(--color-text-muted)", borderBottom: !isRegister ? "2px solid var(--color-primary)" : "none" }}
           >
-            Iniciar Sesión
+            Iniciá Sesión
           </button>
           <button
             type="button"
             onClick={() => { setIsRegister(true); setError(null); }}
             style={{ flex: 1, paddingBottom: 10, fontWeight: 700, fontSize: "0.95rem", color: isRegister ? "var(--color-primary)" : "var(--color-text-muted)", borderBottom: isRegister ? "2px solid var(--color-primary)" : "none" }}
           >
-            Registrarme
+            Registrate
           </button>
         </div>
 
@@ -69,20 +76,52 @@ export const AuthPage: React.FC = () => {
         <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: 10 }}>
           {isRegister && (
             <>
-              <input type="text" placeholder="Nombre y Apellido" value={name} onChange={(e) => setName(e.target.value)} required style={{ padding: 10, borderRadius: 8, border: "1px solid var(--color-border)" }} />
-              <input type="tel" placeholder="Número de teléfono (Opcional)" value={phone} onChange={(e) => setPhone(e.target.value)} style={{ padding: 10, borderRadius: 8, border: "1px solid var(--color-border)" }} />
-              <input type="text" placeholder="Número de documento / DNI" value={documentNumber} onChange={(e) => setDocumentNumber(e.target.value)} required style={{ padding: 10, borderRadius: 8, border: "1px solid var(--color-border)" }} />
+              <input
+                type="text"
+                placeholder="Nombre y Apellido"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                required
+                style={{ padding: 10, borderRadius: 8, border: "1px solid var(--color-border)", outline: "none" }}
+              />
+              <input
+                type="tel"
+                placeholder="Número de teléfono (Opcional)"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+                style={{ padding: 10, borderRadius: 8, border: "1px solid var(--color-border)", outline: "none" }}
+              />
+              <input
+                type="text"
+                placeholder="Número de documento / DNI"
+                value={documentNumber}
+                onChange={(e) => setDocumentNumber(e.target.value)}
+                required
+                style={{ padding: 10, borderRadius: 8, border: "1px solid var(--color-border)", outline: "none" }}
+              />
             </>
           )}
-          <input type="email" placeholder="Correo electrónico" value={email} onChange={(e) => setEmail(e.target.value)} required style={{ padding: 10, borderRadius: 8, border: "1px solid var(--color-border)" }} />
-          <input type="password" placeholder="Contraseña" value={password} onChange={(e) => setPassword(e.target.value)} required style={{ padding: 10, borderRadius: 8, border: "1px solid var(--color-border)" }} />
+          <input
+            type="email"
+            placeholder="Correo electrónico"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+            style={{ padding: 10, borderRadius: 8, border: "1px solid var(--color-border)", outline: "none" }}
+          />
+          <PasswordInput
+            placeholder={isRegister ? "Contraseña (mínimo 6 caracteres)" : "Contraseña"}
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
 
           <button
             type="submit"
             disabled={loading}
             style={{ marginTop: 8, padding: 12, background: "var(--color-primary)", color: "#fff", borderRadius: 10, fontWeight: 700, fontSize: "0.95rem" }}
           >
-            {loading ? "Procesando..." : isRegister ? "Crear Mi Cuenta" : "Ingresar"}
+            {loading ? "Procesando..." : isRegister ? "Creá tu cuenta" : "Ingresá"}
           </button>
         </form>
 
@@ -91,7 +130,7 @@ export const AuthPage: React.FC = () => {
           onClick={() => setShowPwaModal(true)}
           style={{ marginTop: 14, width: "100%", display: "flex", alignItems: "center", justifyContent: "center", gap: 6, fontSize: "0.8rem", color: "var(--color-accent)", fontWeight: 600 }}
         >
-          <Smartphone size={15} /> ¿Cómo instalar la aplicación?
+          <Smartphone size={15} /> ¿Cómo instalás la app?
         </button>
       </div>
 

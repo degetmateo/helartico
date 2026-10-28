@@ -49,7 +49,7 @@ export const StaffValidatorTab: React.FC = () => {
       <div style={{ textAlign: "center", marginBottom: 16 }}>
         <h3 style={{ fontSize: "1.2rem", marginBottom: 4 }}>Validación de Canjes</h3>
         <p style={{ fontSize: "0.85rem", color: "var(--color-text-muted)" }}>
-          Escanea el código QR del cliente o ingresa el código manual.
+          Escaneá el código QR del cliente o ingresá el código manual.
         </p>
       </div>
 
@@ -72,7 +72,7 @@ export const StaffValidatorTab: React.FC = () => {
           border: showScanner ? "1px solid var(--color-border)" : "none",
         }}
       >
-        <Camera size={18} /> {showScanner ? "Ocultar Cámara Escáner" : "Abrir Cámara para Escanear QR"}
+        <Camera size={18} /> {showScanner ? "Ocultar cámara escáner" : "Abrir cámara para escanear QR"}
       </button>
 
       {showScanner && (
@@ -121,14 +121,14 @@ export const StaffValidatorTab: React.FC = () => {
             gap: 8,
           }}
         >
-          <QrCode size={20} /> {loading ? "Verificando..." : "Validar y Consumir Canje"}
+          <QrCode size={20} /> {loading ? "Verificando..." : "Validar y consumir canje"}
         </button>
       </form>
 
       {result && (
         <div style={{ background: "var(--color-success-bg)", border: "1.5px solid var(--color-success)", borderRadius: "var(--radius-md)", padding: 18, textAlign: "center" }}>
           <CheckCircle2 size={36} color="var(--color-success)" style={{ marginBottom: 8 }} />
-          <h4 style={{ color: "var(--color-success)", fontSize: "1.1rem", marginBottom: 6 }}>¡Código Válido y Consumido!</h4>
+          <h4 style={{ color: "var(--color-success)", fontSize: "1.1rem", marginBottom: 6 }}>¡Código válido y consumido!</h4>
           <div style={{ fontSize: "0.95rem", fontWeight: 700, color: "var(--color-text)", marginBottom: 4 }}>
             Entregar producto: {result.productName}
           </div>

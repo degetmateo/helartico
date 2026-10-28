@@ -101,7 +101,7 @@ export const RedemptionsView: React.FC = () => {
       <div style={{ marginBottom: 16 }}>
         <h2 style={{ fontSize: "1.3rem" }}>Mis Códigos de Canje</h2>
         <p style={{ fontSize: "0.85rem", color: "var(--color-text-muted)" }}>
-          Muestra el código QR o el texto en caja antes de que expire (30 min).
+          Mostrá el código QR o el texto en caja antes de que expire (30 min).
         </p>
       </div>
 
@@ -116,9 +116,9 @@ export const RedemptionsView: React.FC = () => {
           }}
         >
           <Ticket size={40} color="var(--color-text-muted)" style={{ marginBottom: 12 }} />
-          <h4 style={{ fontSize: "1rem" }}>Aún no tienes canjes</h4>
+          <h4 style={{ fontSize: "1rem" }}>Todavía no tenés canjes</h4>
           <p style={{ fontSize: "0.85rem", color: "var(--color-text-muted)" }}>
-            Explora el catálogo y canjea tus puntos.
+            Explorá el catálogo y canjeá tus puntos.
           </p>
         </div>
       ) : (
@@ -234,7 +234,7 @@ export const RedemptionsView: React.FC = () => {
                           gap: 4,
                         }}
                       >
-                        <QrCode size={13} /> Escanear en caja
+                        <QrCode size={13} /> Mostrá en caja
                       </span>
                     </div>
                   )}
@@ -311,7 +311,7 @@ export const RedemptionsView: React.FC = () => {
                 color: "var(--color-text-muted)",
               }}
             >
-              Has llegado al final de tu historial
+              Llegaste al final de tu historial
             </div>
           )}
         </>

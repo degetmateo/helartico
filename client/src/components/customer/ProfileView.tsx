@@ -14,7 +14,7 @@ export const ProfileView: React.FC = () => {
       <div style={{ marginBottom: 16 }}>
         <h2 style={{ fontSize: "1.3rem" }}>Mi Perfil</h2>
         <p style={{ fontSize: "0.85rem", color: "var(--color-text-muted)" }}>
-          Detalles de tu cuenta del programa de fidelidad Helartico.
+          Detalles de tu cuenta Helartico.
         </p>
       </div>
 
@@ -26,7 +26,7 @@ export const ProfileView: React.FC = () => {
           {user.pointsBalance ?? 0} <span style={{ fontSize: "1rem", fontWeight: 500 }}>puntos</span>
         </div>
         <div style={{ fontSize: "0.78rem", opacity: 0.8, marginTop: 4 }}>
-          Suma más puntos con cada helado o café que compres en nuestro local.
+          Sumá más puntos con cada compra en nuestro local.
         </div>
       </div>
 
@@ -81,7 +81,7 @@ export const ProfileView: React.FC = () => {
           marginBottom: 12,
         }}
       >
-        <Download size={18} /> Ver Guía de Instalación PWA
+        <Download size={18} /> Instalá nuestra app
       </button>
 
       <button
@@ -101,7 +101,7 @@ export const ProfileView: React.FC = () => {
           gap: 8,
         }}
       >
-        <LogOut size={18} /> Cerrar Sesión
+        <LogOut size={18} /> Cerrar sesión
       </button>
 
       <PwaPromptModal isOpen={showPwaModal} onClose={() => setShowPwaModal(false)} />

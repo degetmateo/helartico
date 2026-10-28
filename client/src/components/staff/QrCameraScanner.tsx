@@ -59,7 +59,7 @@ export const QrCameraScanner: React.FC<QrCameraScannerProps> = ({ onScan, onClos
         if (isMounted) {
           setError(
             err?.name === "NotAllowedError"
-              ? "Permiso de cámara denegado. Habilita el acceso en tu navegador."
+              ? "Permiso de cámara denegado. Habilitá el acceso en tu navegador."
               : "No se encontró cámara disponible en este dispositivo."
           );
         }
@@ -105,7 +105,7 @@ export const QrCameraScanner: React.FC<QrCameraScannerProps> = ({ onScan, onClos
             style={{ width: "100%", borderRadius: 8, overflow: "hidden", minHeight: 250 }}
           />
           <p style={{ textAlign: "center", fontSize: "0.78rem", color: "var(--color-text-muted)", marginTop: 8 }}>
-            Apunta la cámara al código QR que te muestra el cliente en su celular.
+            Apuntá la cámara al código QR que te muestra el cliente en su celular.
           </p>
         </div>
       )}

@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import { useDebounce } from "../../hooks/useDebounce";
 import { useInfiniteScroll } from "../../hooks/useInfiniteScroll";
+import { PasswordInput } from "../common/PasswordInput";
 import { ApiClient } from "../../services/apiClient";
 import type { User } from "../../types";
 
@@ -235,8 +236,8 @@ export const StaffCustomersTab: React.FC = () => {
 
   return (
     <div>
-      <div style={{ display: "flex", gap: 10, marginBottom: 14, flexWrap: "wrap" }}>
-        <div style={{ flex: 1, minWidth: 240, position: "relative" }}>
+      <div style={{ display: "flex", gap: 10, marginBottom: 14, flexWrap: "wrap", alignItems: "center" }}>
+        <div style={{ flex: "1 1 200px", minWidth: 0, position: "relative" }}>
           <Search
             size={18}
             color="var(--color-text-muted)"
@@ -252,7 +253,7 @@ export const StaffCustomersTab: React.FC = () => {
             type="text"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            placeholder="Buscar por DNI, nombre o email..."
+            placeholder="Buscá por DNI, nombre o email..."
             style={{
               width: "100%",
               padding: "10px 36px 10px 38px",
@@ -289,13 +290,15 @@ export const StaffCustomersTab: React.FC = () => {
           style={{
             background: "var(--color-accent)",
             color: "#fff",
-            padding: "10px 16px",
+            padding: "10px 14px",
             borderRadius: 10,
             fontWeight: 600,
+            fontSize: "0.85rem",
             display: "flex",
             alignItems: "center",
             gap: 6,
             whiteSpace: "nowrap",
+            flexShrink: 0,
           }}
         >
           <UserPlus size={16} /> Nuevo Cliente
@@ -338,7 +341,7 @@ export const StaffCustomersTab: React.FC = () => {
           <Search size={36} color="var(--color-text-muted)" style={{ marginBottom: 10 }} />
           <h4 style={{ fontSize: "1rem" }}>No se encontraron clientes</h4>
           <p style={{ fontSize: "0.85rem", color: "var(--color-text-muted)" }}>
-            Intenta con otro DNI, nombre o correo.
+            Probá con otro DNI, nombre o correo.
           </p>
         </div>
       ) : (
@@ -349,28 +352,58 @@ export const StaffCustomersTab: React.FC = () => {
                 key={c.id}
                 style={{
                   background: "#fff",
-                  padding: 14,
+                  padding: "12px 14px",
                   borderRadius: 12,
                   border: "1px solid var(--color-border)",
                   display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                  flexWrap: "wrap",
-                  gap: 12,
+                  flexDirection: "column",
+                  gap: 10,
+                  boxShadow: "var(--shadow-sm)",
                 }}
               >
-                <div>
-                  <div style={{ fontWeight: 700, fontSize: "0.95rem" }}>{c.name}</div>
-                  <div style={{ fontSize: "0.8rem", color: "var(--color-text-muted)", marginTop: 2 }}>
-                    DNI: <strong>{c.documentNumber}</strong> • {c.email}{c.phone ? ` • ${c.phone}` : ""}
+                {/* Header row: Customer Name & Points Badge */}
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "flex-start",
+                    gap: 8,
+                  }}
+                >
+                  <div style={{ minWidth: 0 }}>
+                    <div style={{ fontWeight: 700, fontSize: "0.95rem", color: "var(--color-text)" }}>{c.name}</div>
+                    <div style={{ fontSize: "0.8rem", color: "var(--color-text-muted)", marginTop: 2, wordBreak: "break-word" }}>
+                      DNI: <strong>{c.documentNumber}</strong> • {c.email}{c.phone ? ` • ${c.phone}` : ""}
+                    </div>
                   </div>
-                </div>
 
-                <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                  <span style={{ fontWeight: 700, color: "var(--color-accent)", fontSize: "0.95rem" }}>
+                  <span
+                    style={{
+                      fontWeight: 800,
+                      color: "var(--color-accent)",
+                      background: "var(--color-accent-soft)",
+                      padding: "3px 8px",
+                      borderRadius: 6,
+                      fontSize: "0.85rem",
+                      whiteSpace: "nowrap",
+                      flexShrink: 0,
+                    }}
+                  >
                     {c.pointsBalance ?? 0} pts
                   </span>
+                </div>
 
+                {/* Actions row: Responsive buttons */}
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 8,
+                    flexWrap: "wrap",
+                    paddingTop: 8,
+                    borderTop: "1px solid var(--color-border-subtle)",
+                  }}
+                >
                   <button
                     onClick={() => openEditModal(c)}
                     style={{
@@ -379,15 +412,18 @@ export const StaffCustomersTab: React.FC = () => {
                       border: "1px solid var(--color-border)",
                       padding: "6px 10px",
                       borderRadius: 8,
-                      fontSize: "0.82rem",
+                      fontSize: "0.8rem",
                       fontWeight: 600,
                       display: "flex",
                       alignItems: "center",
+                      justifyContent: "center",
                       gap: 4,
+                      whiteSpace: "nowrap",
+                      flex: "1 1 auto",
                     }}
                     title="Editar datos o cambiar contraseña"
                   >
-                    <Edit2 size={14} /> Editar
+                    <Edit2 size={13} /> Editar
                   </button>
 
                   <button
@@ -397,14 +433,17 @@ export const StaffCustomersTab: React.FC = () => {
                       color: "var(--color-primary)",
                       padding: "6px 12px",
                       borderRadius: 8,
-                      fontSize: "0.82rem",
+                      fontSize: "0.8rem",
                       fontWeight: 700,
                       display: "flex",
                       alignItems: "center",
+                      justifyContent: "center",
                       gap: 4,
+                      whiteSpace: "nowrap",
+                      flex: "1 1 auto",
                     }}
                   >
-                    <PlusCircle size={15} /> Sumar Puntos
+                    <PlusCircle size={14} /> Sumar Puntos
                   </button>
 
                   <button
@@ -415,15 +454,18 @@ export const StaffCustomersTab: React.FC = () => {
                       border: "1px solid #FFE2B5",
                       padding: "6px 10px",
                       borderRadius: 8,
-                      fontSize: "0.82rem",
+                      fontSize: "0.8rem",
                       fontWeight: 600,
                       display: "flex",
                       alignItems: "center",
+                      justifyContent: "center",
                       gap: 4,
+                      whiteSpace: "nowrap",
+                      flex: "1 1 auto",
                     }}
-                    title="Establecer saldo arbitrario (ajuste manual)"
+                    title="Ajustar saldo manualmente"
                   >
-                    <SlidersHorizontal size={14} /> Ajustar Saldo
+                    <SlidersHorizontal size={13} /> Ajustar Saldo
                   </button>
                 </div>
               </div>
@@ -458,7 +500,7 @@ export const StaffCustomersTab: React.FC = () => {
                 color: "var(--color-text-muted)",
               }}
             >
-              Has llegado al final de la lista de clientes
+              Llegaste al final de la lista de clientes
             </div>
           )}
         </>
@@ -501,13 +543,11 @@ export const StaffCustomersTab: React.FC = () => {
                 required
                 style={{ padding: 10, borderRadius: 8, border: "1px solid var(--color-border)" }}
               />
-              <input
-                type="password"
+              <PasswordInput
                 placeholder="Contraseña (por defecto: helartico123)"
                 value={newPassword}
                 onChange={(e) => setNewPassword(e.target.value)}
                 required
-                style={{ padding: 10, borderRadius: 8, border: "1px solid var(--color-border)" }}
               />
               <div style={{ display: "flex", gap: 10, marginTop: 8 }}>
                 <button
@@ -547,7 +587,7 @@ export const StaffCustomersTab: React.FC = () => {
           <div className="modal-card" onClick={(e) => e.stopPropagation()}>
             <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 12 }}>
               <KeyRound size={20} color="var(--color-primary)" />
-              <h3 style={{ fontSize: "1.1rem" }}>Modificar Cliente: {editingCustomer.name}</h3>
+              <h3 style={{ fontSize: "1.05rem", wordBreak: "break-word" }}>Modificar Cliente: {editingCustomer.name}</h3>
             </div>
 
             <form onSubmit={handleUpdateCustomer} style={{ display: "flex", flexDirection: "column", gap: 10 }}>
@@ -558,7 +598,7 @@ export const StaffCustomersTab: React.FC = () => {
                   value={editName}
                   onChange={(e) => setEditName(e.target.value)}
                   required
-                  style={{ width: "100%", padding: 10, borderRadius: 8, border: "1px solid var(--color-border)" }}
+                  style={{ width: "100%", padding: 10, borderRadius: 8, border: "1px solid var(--color-border)", outline: "none" }}
                 />
               </div>
 
@@ -568,7 +608,7 @@ export const StaffCustomersTab: React.FC = () => {
                   type="tel"
                   value={editPhone}
                   onChange={(e) => setEditPhone(e.target.value)}
-                  style={{ width: "100%", padding: 10, borderRadius: 8, border: "1px solid var(--color-border)" }}
+                  style={{ width: "100%", padding: 10, borderRadius: 8, border: "1px solid var(--color-border)", outline: "none" }}
                 />
               </div>
 
@@ -579,7 +619,7 @@ export const StaffCustomersTab: React.FC = () => {
                   value={editEmail}
                   onChange={(e) => setEditEmail(e.target.value)}
                   required
-                  style={{ width: "100%", padding: 10, borderRadius: 8, border: "1px solid var(--color-border)" }}
+                  style={{ width: "100%", padding: 10, borderRadius: 8, border: "1px solid var(--color-border)", outline: "none" }}
                 />
               </div>
 
@@ -590,7 +630,7 @@ export const StaffCustomersTab: React.FC = () => {
                   value={editDoc}
                   onChange={(e) => setEditDoc(e.target.value)}
                   required
-                  style={{ width: "100%", padding: 10, borderRadius: 8, border: "1px solid var(--color-border)" }}
+                  style={{ width: "100%", padding: 10, borderRadius: 8, border: "1px solid var(--color-border)", outline: "none" }}
                 />
               </div>
 
@@ -599,14 +639,12 @@ export const StaffCustomersTab: React.FC = () => {
                   Cambio / Reseteo de Contraseña
                 </label>
                 <p style={{ fontSize: "0.75rem", color: "var(--color-text-muted)", marginBottom: 6 }}>
-                  Si el cliente olvidó su clave, ingresa una nueva aquí para restablecerla. Dejar en blanco para conservar la actual.
+                  Si el cliente olvidó su clave, ingresá una nueva acá para restablecerla. Dejá en blanco para conservar la actual.
                 </p>
-                <input
-                  type="password"
+                <PasswordInput
                   placeholder="Nueva contraseña (mínimo 6 caracteres)"
                   value={editPassword}
                   onChange={(e) => setEditPassword(e.target.value)}
-                  style={{ width: "100%", padding: 8, borderRadius: 6, border: "1px solid var(--color-border)", background: "#fff" }}
                 />
               </div>
 
@@ -896,7 +934,7 @@ export const StaffCustomersTab: React.FC = () => {
               >
                 <div style={{ display: "flex", alignItems: "center", gap: 8, color: "#842029" }}>
                   <AlertTriangle size={20} />
-                  <strong style={{ fontSize: "0.95rem" }}>¿Confirmas este cambio directo de saldo?</strong>
+                  <strong style={{ fontSize: "0.95rem" }}>¿Confirmás este cambio directo de saldo?</strong>
                 </div>
 
                 <p style={{ fontSize: "0.85rem", color: "#66141D", lineHeight: 1.45, margin: 0 }}>
@@ -922,7 +960,7 @@ export const StaffCustomersTab: React.FC = () => {
                       fontWeight: 600,
                     }}
                   >
-                    Volver y modificar
+                    Volvé y modificá
                   </button>
                   <button
                     type="button"

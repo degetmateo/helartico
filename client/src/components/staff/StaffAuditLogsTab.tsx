@@ -212,23 +212,23 @@ export const StaffAuditLogsTab: React.FC = () => {
       <div
         style={{
           background: "#fff",
-          padding: "16px 20px",
+          padding: "14px 18px",
           borderRadius: "var(--radius-md)",
           border: "1px solid var(--color-border)",
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
           flexWrap: "wrap",
-          gap: 12,
+          gap: 10,
         }}
       >
-        <div>
-          <h2 style={{ fontSize: "1.25rem", color: "var(--color-text)", display: "flex", alignItems: "center", gap: 8 }}>
-            <Activity size={22} color="var(--color-primary)" />
-            Registros del Sistema (Auditoría)
+        <div style={{ minWidth: 0 }}>
+          <h2 style={{ fontSize: "1.15rem", color: "var(--color-text)", display: "flex", alignItems: "center", gap: 8 }}>
+            <Activity size={20} color="var(--color-primary)" />
+            Registros del Sistema
           </h2>
-          <p style={{ fontSize: "0.84rem", color: "var(--color-text-muted)", marginTop: 2 }}>
-            Historial inmutable de todas las operaciones realizadas por administradores, empleados y clientes.
+          <p style={{ fontSize: "0.82rem", color: "var(--color-text-muted)", marginTop: 2 }}>
+            Historial inmutable de todas las operaciones realizadas en la plataforma.
           </p>
         </div>
 
@@ -242,12 +242,14 @@ export const StaffAuditLogsTab: React.FC = () => {
             color: "var(--color-primary)",
             padding: "8px 14px",
             borderRadius: "var(--radius-sm)",
-            fontSize: "0.85rem",
+            fontSize: "0.82rem",
             fontWeight: 700,
+            whiteSpace: "nowrap",
+            flexShrink: 0,
           }}
           title="Actualizar registros"
         >
-          <RotateCcw size={15} /> Actualizar
+          <RotateCcw size={14} /> Actualizar
         </button>
       </div>
 
@@ -255,7 +257,7 @@ export const StaffAuditLogsTab: React.FC = () => {
       <div
         style={{
           background: "#fff",
-          padding: 16,
+          padding: 14,
           borderRadius: "var(--radius-md)",
           border: "1px solid var(--color-border)",
           display: "flex",
@@ -264,7 +266,7 @@ export const StaffAuditLogsTab: React.FC = () => {
         }}
       >
         {/* Search & Action Dropdown row */}
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: 12 }}>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: 10 }}>
           {/* Search Input */}
           <div style={{ position: "relative" }}>
             <Search
@@ -273,7 +275,7 @@ export const StaffAuditLogsTab: React.FC = () => {
             />
             <input
               type="text"
-              placeholder="Buscar por usuario, destinatario o detalle..."
+              placeholder="Buscá por usuario, destinatario o detalle..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               style={{
@@ -330,10 +332,12 @@ export const StaffAuditLogsTab: React.FC = () => {
 
         {/* Category Pills */}
         <div
+          className="no-scrollbar"
           style={{
             display: "flex",
-            gap: 8,
+            gap: 6,
             overflowX: "auto",
+            WebkitOverflowScrolling: "touch",
             paddingBottom: 4,
           }}
         >
@@ -649,7 +653,7 @@ export const StaffAuditLogsTab: React.FC = () => {
             )}
             {!hasMore && logs.length > 0 && (
               <span style={{ fontSize: "0.8rem", color: "var(--color-text-muted)" }}>
-                ✓ Se han cargado todos los registros disponibles.
+                ✓ Llegaste al final de todos los registros disponibles.
               </span>
             )}
           </div>

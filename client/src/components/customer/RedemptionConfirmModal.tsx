@@ -31,7 +31,7 @@ export const RedemptionConfirmModal: React.FC<RedemptionConfirmModalProps> = ({
             <div style={{ background: "var(--color-accent-soft)", padding: 8, borderRadius: 12 }}>
               <Gift size={22} color="var(--color-accent)" />
             </div>
-            <h3 style={{ fontSize: "1.1rem" }}>Confirmar Canje</h3>
+            <h3 style={{ fontSize: "1.1rem" }}>Confirmá tu canje</h3>
           </div>
           <button onClick={onClose} style={{ color: "var(--color-text-muted)" }}>
             <X size={20} />
@@ -67,7 +67,7 @@ export const RedemptionConfirmModal: React.FC<RedemptionConfirmModalProps> = ({
 
         <div style={{ display: "flex", gap: 10, alignItems: "center", background: "var(--color-accent-soft)", padding: 10, borderRadius: 10, marginBottom: 18, fontSize: "0.78rem", color: "var(--color-text)" }}>
           <AlertCircle size={18} color="var(--color-accent)" style={{ flexShrink: 0 }} />
-          <span>El código tendrá 30 minutos de validez y es de un solo uso en el mostrador.</span>
+          <span>El código va a tener 30 minutos de validez y es de un solo uso en el mostrador.</span>
         </div>
 
         <div style={{ display: "flex", gap: 10 }}>
@@ -83,7 +83,7 @@ export const RedemptionConfirmModal: React.FC<RedemptionConfirmModalProps> = ({
             disabled={isLoading}
             style={{ flex: 1, padding: 12, borderRadius: 10, background: "var(--color-primary)", color: "#fff", fontWeight: 700 }}
           >
-            {isLoading ? "Canjeando..." : "Sí, Canjear"}
+            {isLoading ? "Canjeando..." : "Sí, Canjeá"}
           </button>
         </div>
       </div>

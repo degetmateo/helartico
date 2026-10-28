@@ -107,7 +107,7 @@ export const CatalogView: React.FC<CatalogViewProps> = ({ userPoints, onRedeemSu
       <div style={{ marginBottom: 14 }}>
         <h2 style={{ fontSize: "1.3rem" }}>Catálogo de Recompensas</h2>
         <p style={{ fontSize: "0.85rem", color: "var(--color-text-muted)" }}>
-          Canjea tus puntos acumulados por helados y café artesanal.
+          Canjeá tus puntos acumulados al comprar productos.
         </p>
       </div>
 
@@ -128,7 +128,7 @@ export const CatalogView: React.FC<CatalogViewProps> = ({ userPoints, onRedeemSu
           type="text"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          placeholder="Buscar helados, café, tortas..."
+          placeholder="Buscá helados, café, tortas..."
           style={{
             width: "100%",
             padding: "10px 36px 10px 38px",
@@ -211,7 +211,7 @@ export const CatalogView: React.FC<CatalogViewProps> = ({ userPoints, onRedeemSu
           <Search size={36} color="var(--color-text-muted)" style={{ marginBottom: 10 }} />
           <h4 style={{ fontSize: "1rem", marginBottom: 4 }}>No se encontraron productos</h4>
           <p style={{ fontSize: "0.85rem", color: "var(--color-text-muted)" }}>
-            Intenta con otro término de búsqueda.
+            Probá con otro término de búsqueda.
           </p>
         </div>
       ) : (
@@ -287,7 +287,7 @@ export const CatalogView: React.FC<CatalogViewProps> = ({ userPoints, onRedeemSu
                         cursor: canRedeem ? "pointer" : "not-allowed",
                       }}
                     >
-                      <Gift size={15} /> {canRedeem ? "Canjear" : "Faltan puntos"}
+                      <Gift size={15} /> {canRedeem ? "Canjeá" : "Faltan puntos"}
                     </button>
                   </div>
                 </div>
@@ -326,7 +326,7 @@ export const CatalogView: React.FC<CatalogViewProps> = ({ userPoints, onRedeemSu
                 color: "var(--color-text-muted)",
               }}
             >
-              Has llegado al final del catálogo ✨
+              Llegaste al final del catálogo ✨
             </div>
           )}
         </>

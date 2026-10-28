@@ -240,3 +240,51 @@ input, select, textarea {
   animation: spin 1s linear infinite;
 }
 
+/* Custom horizontal scroll bar concealment */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Responsive Staff UI Styles */
+@media (max-width: 640px) {
+  .app-header {
+    padding: 10px 14px !important;
+  }
+
+  .brand-badge {
+    gap: 8px !important;
+    min-width: 0;
+  }
+
+  .brand-badge img {
+    width: 32px !important;
+    height: 32px !important;
+    flex-shrink: 0;
+  }
+
+  .brand-badge .brand-title {
+    font-size: 1.05rem !important;
+    line-height: 1.1;
+  }
+
+  .brand-badge .brand-subtitle {
+    font-size: 0.68rem !important;
+    max-width: 140px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .modal-card {
+    padding: 20px 16px !important;
+  }
+
+  .staff-responsive-main {
+    padding: 12px 10px !important;
+  }
+}
+

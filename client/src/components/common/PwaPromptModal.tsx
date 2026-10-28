@@ -53,7 +53,7 @@ export const PwaPromptModal: React.FC<PwaPromptModalProps> = ({ isOpen, onClose 
             <div style={{ background: "var(--color-primary-light)", padding: 8, borderRadius: 10 }}>
               {activeTarget === "desktop" ? <Monitor size={20} color="var(--color-primary)" /> : <Smartphone size={20} color="var(--color-primary)" />}
             </div>
-            <h3 style={{ fontSize: "1.05rem" }}>Instalar Helartico PWA</h3>
+            <h3 style={{ fontSize: "1.05rem" }}>Instalá Helartico</h3>
           </div>
           <button onClick={onClose} style={{ color: "var(--color-text-muted)" }}><X size={20} /></button>
         </div>
@@ -76,7 +76,7 @@ export const PwaPromptModal: React.FC<PwaPromptModalProps> = ({ isOpen, onClose 
               boxShadow: "var(--shadow-md)",
             }}
           >
-            <Download size={18} /> Instalar Aplicación Ahora
+            <Download size={18} /> Instalá la aplicación ahora
           </button>
         )}
 
@@ -90,35 +90,35 @@ export const PwaPromptModal: React.FC<PwaPromptModalProps> = ({ isOpen, onClose 
         <div style={{ background: "var(--color-bg)", borderRadius: 12, padding: 14, fontSize: "0.82rem", lineHeight: 1.6, marginBottom: 14 }}>
           {activeTarget === "ios-safari" && (
             <ol style={{ paddingLeft: 18 }}>
-              <li>Toca el botón <strong>Compartir <Share2 size={13} style={{ display: "inline" }} /></strong> en la barra inferior de Safari.</li>
-              <li>Desliza hacia abajo y presiona <strong>"Agregar a pantalla de inicio"</strong>.</li>
-              <li>Toca <strong>"Agregar"</strong> arriba a la derecha para finalizar.</li>
+              <li>Tocá el botón <strong>Compartir <Share2 size={13} style={{ display: "inline" }} /></strong> en la barra inferior de Safari.</li>
+              <li>Deslizá hacia abajo y presioná <strong>"Agregar a pantalla de inicio"</strong>.</li>
+              <li>Tocá <strong>"Agregar"</strong> arriba a la derecha para finalizar.</li>
             </ol>
           )}
 
           {activeTarget === "ios-chrome" && (
             <ol style={{ paddingLeft: 18 }}>
-              <li>En Chrome para iPhone, toca el ícono de <strong>Compartir</strong> en la barra de URL o el menú de tres puntos (<strong>...</strong>).</li>
-              <li>Desplázate hacia abajo y elige <strong>"Agregar a pantalla de inicio"</strong>.</li>
+              <li>En Chrome para iPhone, tocá el ícono de <strong>Compartir</strong> en la barra de URL o el menú de tres puntos (<strong>...</strong>).</li>
+              <li>Deslizá hacia abajo y elegí <strong>"Agregar a pantalla de inicio"</strong>.</li>
               <li style={{ color: "var(--color-text-muted)", fontSize: "0.76rem", marginTop: 4 }}>
-                *Si tu versión de iOS no muestra la opción en Chrome, abre el link en Safari.
+                *Si tu versión de iOS no muestra la opción en Chrome, abrí el link en Safari.
               </li>
             </ol>
           )}
 
           {activeTarget === "android" && (
             <ol style={{ paddingLeft: 18 }}>
-              <li>Toca el menú de <strong>tres puntos (⋮)</strong> en la esquina superior derecha del navegador.</li>
-              <li>Selecciona <strong>"Instalar aplicación"</strong> o "Agregar a la pantalla principal".</li>
-              <li>Confirma la instalación para tener el ícono directo en tu celular.</li>
+              <li>Tocá el menú de <strong>tres puntos (⋮)</strong> en la esquina superior derecha del navegador.</li>
+              <li>Elegí <strong>"Instalar aplicación"</strong> o "Agregar a la pantalla principal".</li>
+              <li>Confirmá la instalación para tener el ícono directo en tu celular.</li>
             </ol>
           )}
 
           {activeTarget === "desktop" && (
             <ol style={{ paddingLeft: 18 }}>
-              <li>En <strong>Chrome o Edge</strong>, busca el ícono de instalación (<strong>⊕</strong> o pantalla con flecha) a la derecha de la barra de direcciones.</li>
-              <li>O presiona el menú de <strong>tres puntos (⋮)</strong> &gt; <em>"Guardar y compartir"</em> &gt; <em>"Instalar Helartico"</em>.</li>
-              <li>Una vez instalada, podrás abrir Helartico directamente desde tu escritorio o barra de tareas como una aplicación nativa.</li>
+              <li>En <strong>Chrome o Edge</strong>, buscá el ícono de instalación (<strong>⊕</strong> o pantalla con flecha) a la derecha de la barra de direcciones.</li>
+              <li>O presioná el menú de <strong>tres puntos (⋮)</strong> &gt; <em>"Guardar y compartir"</em> &gt; <em>"Instalar Helartico"</em>.</li>
+              <li>Una vez instalada, vas a poder abrir Helartico directamente desde tu escritorio o barra de tareas como una app independiente.</li>
             </ol>
           )}
         </div>

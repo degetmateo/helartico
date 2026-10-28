@@ -1,7 +1,7 @@
 {
   "name": "helartico",
   "version": "1.0.0",
-  "description": "Sistema de Fidelidad y Recompensas Helartico - Helados & Café (PWA + API)",
+  "description": "Sistema de Puntos y Recompensas Helartico - Helados & Café (PWA + API)",
   "scripts": {
     "dev:server": "pnpm --filter helartico-server dev",
     "dev:client": "pnpm --filter client dev",

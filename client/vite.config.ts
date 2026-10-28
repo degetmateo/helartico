@@ -16,7 +16,7 @@ export default defineConfig({
       manifest: {
         name: "Helartico - Helados & Café",
         short_name: "Helartico",
-        description: "Sistema de Fidelidad y Canje de Puntos de Helartico",
+        description: "Sumá puntos y canjeá premios en Helartico Helados & Café",
         theme_color: "#384C34",
         background_color: "#F6F2EA",
         display: "standalone",

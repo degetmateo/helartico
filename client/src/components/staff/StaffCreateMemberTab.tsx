@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { UserPlus } from "lucide-react";
 import { ApiClient } from "../../services/apiClient";
+import { PasswordInput } from "../common/PasswordInput";
 
 export const StaffCreateMemberTab: React.FC = () => {
   const [name, setName] = useState<string>("");
@@ -56,7 +57,7 @@ export const StaffCreateMemberTab: React.FC = () => {
         <input type="email" placeholder="Correo electrónico institucional" value={email} onChange={(e) => setEmail(e.target.value)} required style={{ padding: 10, borderRadius: 8, border: "1px solid var(--color-border)" }} />
         <input type="tel" placeholder="Teléfono" value={phone} onChange={(e) => setPhone(e.target.value)} required style={{ padding: 10, borderRadius: 8, border: "1px solid var(--color-border)" }} />
         <input type="text" placeholder="Documento / DNI" value={documentNumber} onChange={(e) => setDocumentNumber(e.target.value)} required style={{ padding: 10, borderRadius: 8, border: "1px solid var(--color-border)" }} />
-        <input type="password" placeholder="Contraseña de acceso" value={password} onChange={(e) => setPassword(e.target.value)} required style={{ padding: 10, borderRadius: 8, border: "1px solid var(--color-border)" }} />
+        <PasswordInput placeholder="Contraseña de acceso" value={password} onChange={(e) => setPassword(e.target.value)} required />
         
         <button
           type="submit"

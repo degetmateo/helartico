@@ -3,6 +3,7 @@ import { Edit2, Loader2, Plus, Search, Shield, Trash2, UserCheck, X } from "luci
 import { useAuth } from "../../context/AuthContext";
 import { useDebounce } from "../../hooks/useDebounce";
 import { useInfiniteScroll } from "../../hooks/useInfiniteScroll";
+import { PasswordInput } from "../common/PasswordInput";
 import { ApiClient } from "../../services/apiClient";
 import type { StaffRole, User } from "../../types";
 
@@ -186,10 +187,10 @@ export const StaffManagementTab: React.FC = () => {
   return (
     <div>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16, flexWrap: "wrap", gap: 10 }}>
-        <div>
+        <div style={{ minWidth: 0 }}>
           <h3 style={{ fontSize: "1.15rem" }}>Gestión Integral del Personal</h3>
           <p style={{ fontSize: "0.82rem", color: "var(--color-text-muted)" }}>
-            Solo Administradores pueden dar de alta, modificar y dar de baja miembros del staff.
+            Solo administradores pueden dar de alta, modificar y dar de baja miembros del equipo.
           </p>
         </div>
         <button
@@ -204,6 +205,8 @@ export const StaffManagementTab: React.FC = () => {
             display: "flex",
             alignItems: "center",
             gap: 6,
+            whiteSpace: "nowrap",
+            flexShrink: 0,
           }}
         >
           <Plus size={16} /> Nuevo Personal
@@ -221,7 +224,7 @@ export const StaffManagementTab: React.FC = () => {
           type="text"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          placeholder="Buscar personal por nombre, correo o DNI..."
+          placeholder="Buscá por nombre, correo o DNI..."
           style={{
             width: "100%",
             padding: "10px 36px 10px 38px",
@@ -271,7 +274,7 @@ export const StaffManagementTab: React.FC = () => {
         <div style={{ textAlign: "center", padding: "40px 20px", background: "#fff", borderRadius: 12, border: "1px solid var(--color-border)" }}>
           <Search size={36} color="var(--color-text-muted)" style={{ marginBottom: 10 }} />
           <h4 style={{ fontSize: "1rem" }}>No se encontró personal</h4>
-          <p style={{ fontSize: "0.85rem", color: "var(--color-text-muted)" }}>Prueba con otro término de búsqueda.</p>
+          <p style={{ fontSize: "0.85rem", color: "var(--color-text-muted)" }}>Probá con otro término de búsqueda.</p>
         </div>
       ) : (
         <>
@@ -284,27 +287,28 @@ export const StaffManagementTab: React.FC = () => {
                   key={s.id}
                   style={{
                     background: "#fff",
-                    padding: 14,
+                    padding: "12px 14px",
                     borderRadius: 12,
                     border: "1px solid var(--color-border)",
                     display: "flex",
                     justifyContent: "space-between",
                     alignItems: "center",
                     flexWrap: "wrap",
-                    gap: 12,
+                    gap: 10,
+                    boxShadow: "var(--shadow-sm)",
                   }}
                 >
-                  <div>
-                    <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                  <div style={{ minWidth: 0, flex: "1 1 200px" }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: 6, flexWrap: "wrap" }}>
                       <span style={{ fontWeight: 700, fontSize: "0.95rem" }}>{s.name}</span>
                       {isSelf && (
                         <span style={{ fontSize: "0.72rem", background: "var(--color-primary-light)", color: "var(--color-primary)", padding: "2px 6px", borderRadius: 6, fontWeight: 700 }}>
-                          (Tú)
+                          (Vos)
                         </span>
                       )}
                       <span
                         style={{
-                          fontSize: "0.75rem",
+                          fontSize: "0.72rem",
                           fontWeight: 700,
                           padding: "2px 8px",
                           borderRadius: 6,
@@ -313,6 +317,7 @@ export const StaffManagementTab: React.FC = () => {
                           gap: 4,
                           background: isAdmin ? "var(--color-accent-soft)" : "var(--color-primary-light)",
                           color: isAdmin ? "var(--color-accent)" : "var(--color-primary)",
+                          whiteSpace: "nowrap",
                         }}
                       >
                         {isAdmin ? <Shield size={12} /> : <UserCheck size={12} />}
@@ -320,14 +325,14 @@ export const StaffManagementTab: React.FC = () => {
                       </span>
                     </div>
 
-                    <div style={{ fontSize: "0.8rem", color: "var(--color-text-muted)", marginTop: 4 }}>
+                    <div style={{ fontSize: "0.8rem", color: "var(--color-text-muted)", marginTop: 4, wordBreak: "break-word" }}>
                       {s.email}
                       {s.phone ? ` • Tel: ${s.phone}` : " • Sin teléfono"}
                       {s.documentNumber ? ` • DNI: ${s.documentNumber}` : " • Sin DNI"}
                     </div>
                   </div>
 
-                  <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: 6, flexShrink: 0 }}>
                     <button
                       onClick={() => openEditModal(s)}
                       style={{
@@ -341,9 +346,10 @@ export const StaffManagementTab: React.FC = () => {
                         display: "flex",
                         alignItems: "center",
                         gap: 4,
+                        whiteSpace: "nowrap",
                       }}
                     >
-                      <Edit2 size={14} /> Editar
+                      <Edit2 size={13} /> Editar
                     </button>
 
                     {!isSelf && (
@@ -359,10 +365,11 @@ export const StaffManagementTab: React.FC = () => {
                           display: "flex",
                           alignItems: "center",
                           gap: 4,
+                          whiteSpace: "nowrap",
                         }}
                         title="Eliminar usuario"
                       >
-                        <Trash2 size={14} />
+                        <Trash2 size={13} />
                       </button>
                     )}
                   </div>
@@ -382,7 +389,7 @@ export const StaffManagementTab: React.FC = () => {
 
           {!hasMore && staffList.length > 0 && (
             <div style={{ textAlign: "center", padding: "16px 0", fontSize: "0.78rem", color: "var(--color-text-muted)" }}>
-              Has llegado al final de la lista de personal
+              Llegaste al final de la lista de personal
             </div>
           )}
         </>
@@ -392,9 +399,9 @@ export const StaffManagementTab: React.FC = () => {
       {showCreateModal && (
         <div className="modal-overlay" onClick={() => setShowCreateModal(false)}>
           <div className="modal-card" onClick={(e) => e.stopPropagation()}>
-            <h3 style={{ fontSize: "1.1rem", marginBottom: 12 }}>Dar de Alta Nuevo Personal</h3>
+            <h3 style={{ fontSize: "1.05rem", marginBottom: 8, wordBreak: "break-word" }}>Dar de Alta Nuevo Personal</h3>
             <p style={{ fontSize: "0.8rem", color: "var(--color-text-muted)", marginBottom: 12 }}>
-              DNI y Teléfono son opcionales. Puedes asignar el rol de Empleado o Administrador.
+              DNI y Teléfono son opcionales. Podés asignar el rol de Empleado o Administrador.
             </p>
             <form onSubmit={handleCreate} style={{ display: "flex", flexDirection: "column", gap: 10 }}>
               <input
@@ -427,13 +434,11 @@ export const StaffManagementTab: React.FC = () => {
                 onChange={(e) => setCreateDoc(e.target.value)}
                 style={{ padding: 10, borderRadius: 8, border: "1px solid var(--color-border)" }}
               />
-              <input
-                type="password"
+              <PasswordInput
                 placeholder="Contraseña de acceso *"
                 value={createPassword}
                 onChange={(e) => setCreatePassword(e.target.value)}
                 required
-                style={{ padding: 10, borderRadius: 8, border: "1px solid var(--color-border)" }}
               />
 
               <div style={{ display: "flex", flexDirection: "column", gap: 4, marginTop: 4 }}>
@@ -475,7 +480,7 @@ export const StaffManagementTab: React.FC = () => {
       {editingStaff && (
         <div className="modal-overlay" onClick={() => setEditingStaff(null)}>
           <div className="modal-card" onClick={(e) => e.stopPropagation()}>
-            <h3 style={{ fontSize: "1.1rem", marginBottom: 12 }}>Editar Personal: {editingStaff.name}</h3>
+            <h3 style={{ fontSize: "1.05rem", marginBottom: 12, wordBreak: "break-word" }}>Editar Personal: {editingStaff.name}</h3>
             <form onSubmit={handleUpdate} style={{ display: "flex", flexDirection: "column", gap: 10 }}>
               <div>
                 <label style={{ fontSize: "0.78rem", color: "var(--color-text-muted)" }}>Nombre completo</label>
@@ -522,7 +527,7 @@ export const StaffManagementTab: React.FC = () => {
                   <option value="ADMIN">👑 Administrador</option>
                 </select>
                 {editingStaff.id === currentUser?.id && (
-                  <span style={{ fontSize: "0.72rem", color: "var(--color-text-muted)" }}>No puedes quitarte el rol de Administrador a ti mismo.</span>
+                  <span style={{ fontSize: "0.72rem", color: "var(--color-text-muted)" }}>No podés quitarte el rol de Administrador a vos mismo.</span>
                 )}
               </div>
 
@@ -530,12 +535,10 @@ export const StaffManagementTab: React.FC = () => {
                 <label style={{ fontSize: "0.8rem", fontWeight: 700, color: "var(--color-text)", display: "block", marginBottom: 4 }}>
                   Cambiar Contraseña (Opcional)
                 </label>
-                <input
-                  type="password"
+                <PasswordInput
                   value={editNewPassword}
                   onChange={(e) => setEditNewPassword(e.target.value)}
-                  placeholder="Dejar vacío para conservar actual"
-                  style={{ width: "100%", padding: 8, borderRadius: 6, border: "1px solid var(--color-border)", background: "#fff" }}
+                  placeholder="Dejá vacío para conservar la actual"
                 />
               </div>
 

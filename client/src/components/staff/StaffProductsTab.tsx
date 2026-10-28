@@ -180,7 +180,7 @@ export const StaffProductsTab: React.FC = () => {
   const handleDelete = async (p: Product) => {
     if (
       !confirm(
-        `¿Deseas eliminar "${p.name}" en su totalidad? Esta acción es irreversible y eliminará también su imagen del repositorio.`
+        `¿Querés eliminar "${p.name}" en su totalidad? Esta acción es irreversible y también eliminará su imagen del repositorio.`
       )
     ) {
       return;
@@ -206,10 +206,10 @@ export const StaffProductsTab: React.FC = () => {
           gap: 10,
         }}
       >
-        <div>
+        <div style={{ minWidth: 0 }}>
           <h3 style={{ fontSize: "1.1rem" }}>Gestión del Catálogo</h3>
           <p style={{ fontSize: "0.82rem", color: "var(--color-text-muted)" }}>
-            Administra los productos y su costo en puntos.
+            Administrá los productos y su costo en puntos.
           </p>
         </div>
         <button
@@ -224,6 +224,8 @@ export const StaffProductsTab: React.FC = () => {
             display: "flex",
             alignItems: "center",
             gap: 6,
+            whiteSpace: "nowrap",
+            flexShrink: 0,
           }}
         >
           <Plus size={16} /> Nuevo Producto
@@ -247,7 +249,7 @@ export const StaffProductsTab: React.FC = () => {
           type="text"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          placeholder="Buscar producto por nombre..."
+          placeholder="Buscá un producto por nombre..."
           style={{
             width: "100%",
             padding: "10px 36px 10px 38px",
@@ -322,7 +324,7 @@ export const StaffProductsTab: React.FC = () => {
           <Search size={36} color="var(--color-text-muted)" style={{ marginBottom: 10 }} />
           <h4 style={{ fontSize: "1rem" }}>No se encontraron productos</h4>
           <p style={{ fontSize: "0.85rem", color: "var(--color-text-muted)" }}>
-            Prueba buscando con otro término.
+            Probá buscando con otro término.
           </p>
         </div>
       ) : (
@@ -330,8 +332,8 @@ export const StaffProductsTab: React.FC = () => {
           <div
             style={{
               display: "grid",
-              gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))",
-              gap: 14,
+              gridTemplateColumns: "repeat(auto-fill, minmax(160px, 1fr))",
+              gap: 12,
             }}
           >
             {products

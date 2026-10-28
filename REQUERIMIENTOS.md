@@ -743,3 +743,51 @@ En el panel del personal (`StaffAdminDashboard`), los usuarios con rol `ADMIN` a
    - Visor desplegable de detalles técnicos estructurados en formato JSON (diferencias de puntos, motivos, IDs vinculados).
 3. **Paginación Infinita**:
    - Integración con el hook `useInfiniteScroll` mediante `IntersectionObserver` para una navegación continua y fluida sin saltos de página.
+
+---
+
+## 18. Adaptación Móvil de Staff, Revelado de Contraseñas, Depuración de Términos y Localización Argentina
+
+### 18.1 Optimización de la Interfaz STAFF para Dispositivos Móviles
+Para evitar quiebres desprolijos de texto, desbordes horizontales o botones comprimidos al visualizar el panel de personal en teléfonos inteligentes:
+1. **Encabezado y Pestañas del Staff (`StaffAdminDashboard.tsx`)**:
+   - Subtítulo acotado a *"Panel de Control"* con regla elíptica de una sola línea (`whiteSpace: "nowrap"`, `overflow: "hidden"`, `textOverflow: "ellipsis"`).
+   - Insignias de usuario y rol compactas que preservan el botón de *"Cerrar sesión"* visible y accesible.
+   - Pestañas con desplazamiento táctil horizontal suave, clase de utilidad `.no-scrollbar` para ocultar barras de scroll antiestéticas y botones con `flexShrink: 0` y `whiteSpace: "nowrap"`.
+2. **Reestructuración de Tarjetas de Clientes (`StaffCustomersTab.tsx`)**:
+   - División en dos filas funcionales:
+     - **Fila Superior (Identificación)**: Nombre del cliente alineado a la izquierda y píldora de saldo de puntos destacada a la derecha.
+     - **Fila de Acciones**: Contenedor con `flexWrap: "wrap"` y separación adecuada (`gap: 8`), con botones flexibles (`flex: "1 1 auto"`, `whiteSpace: "nowrap"`) para *"Sumar Puntos"*, *"Ajustar Saldo"* y *"Editar"*. Esto impide que el texto de los botones se rompa en varias líneas.
+3. **Cuadrículas Adaptativas en Productos y Auditoría**:
+   - Redimensión dinámica de columnas con `repeat(auto-fit, minmax(160px, 1fr))` en el catálogo de productos y `minmax(200px, 1fr)` en filtros de auditoría para evitar desbordes en resoluciones reducidas.
+4. **Modales y Diálogos Responsivos**:
+   - Ajuste de padding en `.modal-card` a `20px 16px` en pantallas móviles.
+   - Regla `wordBreak: "break-word"` y tamaños adaptativos en encabezados de modales para nombres extensos de clientes y personal.
+
+### 18.2 Componente Reutilizable de Revelado de Contraseñas (`PasswordInput`)
+Se desarrolló el componente `PasswordInput` (`client/src/components/common/PasswordInput.tsx`) para permitir que los usuarios comprueben visualmente lo que están escribiendo antes de enviar un formulario:
+- **Conmutación Visual**: Botón integrado con iconos `Eye` y `EyeOff` (Lucide Icons) que alterna dinámicamente entre `type="password"` y `type="text"`.
+- **Compensación de Espaciado**: Relleno interno derecho (`paddingRight: 42px`) que garantiza que el texto ingresado no se solape con el botón de alternancia.
+- **Accesibilidad**: Inclusión de atributos `aria-label`, `title` descriptivos y `tabIndex={-1}` en el botón para no interferir con la navegación por teclado.
+- **Implementación Universal**: Integrado en la pantalla de autenticación (Login y Registro), modal de alta de cliente asistida, edición de datos de cliente, alta de personal institucional y edición de personal/contraseña.
+
+### 18.3 Eliminación del Concepto "Club de Fidelidad" / "Programa de Fidelidad"
+Se erradicaron todas las apariciones de *"club de fidelidad"* y *"programa de fidelidad"* en la interfaz visual, metadatos y manifiestos de la aplicación:
+- **SEO y Metadatos (`index.html`, `manifest.json`, `vite.config.ts`)**: Actualización de títulos y descripciones hacia *"Helartico — Helados & Café | Beneficios y Puntos"* y *"Sumá puntos y canjeá premios en Helartico Helados & Café"*.
+- **Página de Inicio y Auth (`AuthPage.tsx`)**: Reemplazo del subtítulo de bienvenida por *"Helados & Café • Sumá y Canjeá Puntos"*.
+- **Catálogo y Perfil**: Enfoque directo en puntos y recompensas transparentes.
+
+### 18.4 Estandarización al Español Rioplatense (Voseo Formal)
+Toda la interfaz de usuario fue redactada bajo la modalidad del voseo argentino formal, brindando una comunicación natural, cercana y profesional:
+- **Búsquedas y Exploración**: *"Buscá helados, café, delicias..."*, *"Buscá por DNI o nombre..."*, *"Probá con otro término de búsqueda."*.
+- **Autenticación y Registro**: *"Iniciá Sesión"*, *"Registrate"*, *"Ingresá tu correo"*, *"Creá tu cuenta"*.
+- **Canjes y Premios**: *"Canjeá"*, *"Confirmá tu canje"*, *"Sí, Canjeá"*, *"Mostrá el código QR o el texto en caja"*, *"Todavía no tenés canjes"*, *"Explorá el catálogo y canjeá tus puntos."*.
+- **Instalación de la PWA**: *"Instalá Helartico"*, *"Tocá el botón Compartir"*, *"Deslizá hacia abajo"*, *"Elegí 'Instalar aplicación'"*, *"Confirmá la instalación"*, *"vas a poder abrir Helartico"*.
+- **Navegación e Historial**: *"Llegaste al final del catálogo ✨"*, *"Llegaste al final de tu historial"*, *"Llegaste al final de la lista"*, *"No podés quitarte el rol de Administrador a vos mismo"*.
+
+### 18.5 Pruebas Automatizadas
+- **Suite de Pruebas en Cliente (`client/src/__tests__/uiLocalizationAndComponents.test.ts`)**:
+  - Verificación del renderizado del componente `PasswordInput` con propiedades controladas.
+  - Comprobación de estándares de voseo y descarte de conjugaciones de tuteo no deseadas.
+  - Validación de ausencia de cadenas obsoletas referidas a "club de fidelidad".
+- **Suite Integral del Sistema**: 62 pruebas backend en Vitest + 6 pruebas frontend en Vitest en estado verde (100% éxito).
